@@ -1,4 +1,4 @@
-# Windows image file caches
+﻿# Windows image file caches
 Thumbs.db
 ehthumbs.db
 
@@ -39,6 +39,24 @@ $RECYCLE.BIN/
 .Trashes
 .VolumeIcon.icns
 
+#java specific
+*.class
+
+#netbeans ignore personal stuff
+nbproject/
+
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
@@ -47,3 +65,6 @@ Temporary Items
 .apdisk
 /TFG-blockchain/nbproject/private/
 /TFG-blockchain/build/
+/Añadir-transacción/nbproject/private/
+/Añadir-transacción/build/
+/demo swing/nbproject/private/
