@@ -47,7 +47,7 @@ public class Bloque {
         relleno = r;
 
     }
-
+/*
     @SuppressWarnings("empty-statement")
     public void main(int index, String tiempo, String data, String hashAnterior) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         hashAnterior = "";
@@ -61,6 +61,7 @@ public class Bloque {
         System.out.println(getHash());
 
     }
+    */
 
     static String[] minarBloque(int index, String tiempo, String data, String hashAnterior, int dificultad) throws NoSuchAlgorithmException, FileNotFoundException, IOException {
 
@@ -117,7 +118,7 @@ public class Bloque {
 
         return hashtext;
     }
-
+/*
     static String comprobarHash(int index, String tiempo, String data, String hashAnterior, int rellenoInt) throws NoSuchAlgorithmException {
 
         String plaintext;
@@ -137,7 +138,7 @@ public class Bloque {
 
         return hashtext;
     }
-
+*/
     /**
      * @return the index
      */
