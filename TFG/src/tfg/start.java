@@ -73,8 +73,8 @@ public class start extends javax.swing.JFrame {
 
         try {
             main.main();
-            String data = "";
-            mining = new Thread(new mine(main.TFG, data));
+
+            mining = new Thread(new mine(main.TFG));
             mining.start();
 
         } catch (NoSuchAlgorithmException ex) {

@@ -52,7 +52,7 @@ public class Block {
         //Changing the nonce to match difficulty
         while (!hash.startsWith(code)) {
 
-            fileData = main.readFile("contentsBLOCK.txt");
+            fileData = main.TFG.getCurrentMiningContents();
 
             int t = 0;
             while (!hash.startsWith(code) && t != 10) {
@@ -117,8 +117,8 @@ public class Block {
     /**
      * @param time the time to set
      */
-    public void setTime(String tiempo) {
-        this.time = tiempo;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     /**

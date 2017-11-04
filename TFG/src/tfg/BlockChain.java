@@ -19,11 +19,13 @@ public class BlockChain {
     private String name;
     private int diff;
     private List<Block> chain;
+    private String currentMiningContents;
 
     BlockChain(String name) {
         this.name = name;
-        this.diff = 0;
+        this.diff = 4; //avoid an extreme amount of blocks mined
         chain = new ArrayList<>();
+        currentMiningContents = "";
 
     }
         public boolean validateChain() throws NoSuchAlgorithmException {
@@ -107,6 +109,20 @@ public class BlockChain {
      */
     public void setDiff(int diff) {
         this.diff = diff;
+    }
+
+    /**
+     * @return the currentMiningContents
+     */
+    public String getCurrentMiningContents() {
+        return currentMiningContents;
+    }
+
+    /**
+     * @param currentMiningContents the currentMiningContents to set
+     */
+    public void setCurrentMiningContents(String currentMiningContents) {
+        this.currentMiningContents = currentMiningContents;
     }
 
 }

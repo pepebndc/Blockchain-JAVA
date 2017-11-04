@@ -56,6 +56,7 @@ public class manage extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jSeparator3 = new javax.swing.JSeparator();
+        jButton3 = new javax.swing.JButton();
 
         jLabel3.setText("jLabel3");
 
@@ -126,6 +127,13 @@ public class manage extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(jTextPane1);
 
+        jButton3.setText("SHOW CURRENT BLOCK");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -161,13 +169,16 @@ public class manage extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(81, 81, 81)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(33, 33, 33)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton5)
-                    .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField4))
+                    .addComponent(jLabel5)
+                    .addComponent(jButton3)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton5)))
                 .addGap(55, 55, 55)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(42, Short.MAX_VALUE))
@@ -199,17 +210,21 @@ public class manage extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4))
-                        .addGap(69, 69, 69)
-                        .addComponent(jButton5))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addGap(40, 40, 40))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
 
         pack();
@@ -218,34 +233,32 @@ public class manage extends javax.swing.JFrame {
     @SuppressWarnings("null")
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        String datos = jTextField1.getText();
-
-        PrintWriter writer = null;
-        try {
-            String text = jTextField1.getText();
-            jTextField1.setText(null);
-
-            //saber el nº de lineas del fichero
-            File input = new File("contentsBLOCK.txt");
-            Scanner iterate = new Scanner(input);
-            int numLines = 0;
-            while (iterate.hasNextLine()) {
-                String currLine = iterate.nextLine();
-                numLines++;
-            }
-
-            String fileData = main.readFile("contentsBLOCK.txt");
-            writer = new PrintWriter("contentsBLOCK.txt");
-            writer.println(fileData);
-            writer.println(text);
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            writer.close();
+        //PrintWriter writer = null;
+        String text = jTextField1.getText();
+        jTextField1.setText(null);
+        /*
+        //saber el nº de lineas del fichero
+        File input = new File("contentsBLOCK.txt");
+        Scanner iterate = new Scanner(input);
+        int numLines = 0;
+        while (iterate.hasNextLine()) {
+        String currLine = iterate.nextLine();
+        numLines++;
         }
+        
+        String fileData = main.readFile("contentsBLOCK.txt");
+        writer = new PrintWriter("contentsBLOCK.txt");
+        writer.println(fileData);
+        writer.println(text);
+         */
+
+        String current = main.TFG.getCurrentMiningContents();
+        if (!current.equals("")) {
+            main.TFG.setCurrentMiningContents(current + "\n" + text);
+        } else {
+            main.TFG.setCurrentMiningContents(text);
+        }
+        //writer.close();
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -274,8 +287,15 @@ public class manage extends javax.swing.JFrame {
         String text = jTextField4.getText();
         if (!text.equals("")) {
             int num = Integer.parseInt(text);
-            String contenidos = main.TFG.getChain().get(num).getData();
-            jTextArea1.setText(contenidos);
+            if (num > main.TFG.getChain().size()) {
+
+                jTextArea1.setText("Block not yet mined \nDO NOT TOUCH ANYTHING");
+                jButton5.setEnabled(false);
+            } else {
+                String contenidos = main.TFG.getChain().get(num).getData();
+                jTextArea1.setText(contenidos);
+                jButton5.setEnabled(true);
+            }
         } else {
             jTextArea1.setText("");
         }
@@ -291,13 +311,10 @@ public class manage extends javax.swing.JFrame {
             String MODhash = Block.computeHash(num, main.TFG.getChain().get(num).getTime(), contents, main.TFG.getChain().get(num).getLastHash(), main.TFG.getChain().get(num).getNonce());
             main.TFG.getChain().get(num).setHash(MODhash);
 
-            PrintWriter writer = new PrintWriter("contents/BLOCK" + num + ".txt");
-
-            writer.println(contents);
-            writer.close();
-        } catch (NoSuchAlgorithmException | FileNotFoundException ex) {
+        } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -305,6 +322,13 @@ public class manage extends javax.swing.JFrame {
         jTextField3.setText(diff);
         repaint();
     }//GEN-LAST:event_formWindowActivated
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        jTextField4.setText("CURRENT");
+        jTextArea1.setText(main.TFG.getCurrentMiningContents()+"\n\n-----------------------\nYOU CAN'T EDIT THIS BLOCK\n-----------------------\nTo add a transaction, use the menu.");
+        jButton5.setEnabled(false);
+        this.repaint();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -348,6 +372,7 @@ public class manage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;

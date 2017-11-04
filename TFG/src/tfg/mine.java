@@ -20,11 +20,11 @@ public class mine implements Runnable {
 
     private boolean mining = true;
     private BlockChain chain;
-    private String data;
+    private String miningData;
 
-    public mine(BlockChain chain, String data) {
+    public mine(BlockChain chain) {
         this.chain = chain;
-        this.data = data;
+        this.miningData = main.TFG.getCurrentMiningContents();
     }
 
     @Override
@@ -35,13 +35,7 @@ public class mine implements Runnable {
             //VACIAR ARCHIVO DE ANTES
             PrintWriter writer = null;
 
-            try {
-                writer = new PrintWriter("contentsBLOCK.txt");
-                writer.println("");
-                writer.close();
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            main.TFG.setCurrentMiningContents("");
 
             int length = getChain().getChain().size();
             int index = length;
@@ -50,18 +44,10 @@ public class mine implements Runnable {
             String time = main.currentTime();
 
             String[] mined = {"", ""};
-            String fileData = "";
-            String fileDir = "contentsBLOCK.txt";
-            try {
-                fileData = main.readFile(fileDir);
-                setData(fileData);
 
-            } catch (IOException ex) {
-                Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.out.println(fileData);
+
             try {
-                mined = Block.mineBlock(index, time, fileDir, lastHash, diff);
+                mined = Block.mineBlock(index, time, miningData, lastHash, diff);
             } catch (NoSuchAlgorithmException | FileNotFoundException ex) {
                 Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("pepe1" + index + ex);
@@ -70,21 +56,10 @@ public class mine implements Runnable {
                 System.out.println("pepe2");
             }
             Block B = null;
+            //ADD THE BLOCK TO THE CHAIN
             try {
-                //ADD THE BLOCK TO THE CHAIN
-                fileData = main.readFile(fileDir);
-                setData(fileData);
-                B = new Block(length, time, getData(), lastHash, mined[0], mined[1]);
-
-                //SAVE A COPY OF THE CONTENTS OF EACH BLOCK
-                writer = new PrintWriter("contents/BLOCK" + index + ".txt");
-                fileData = main.readFile(fileDir);
-                writer.println(fileData);
-                writer.close();
-
-            } catch (NoSuchAlgorithmException | FileNotFoundException ex) {
-                Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+                B = new Block(length, time, main.TFG.getCurrentMiningContents(), lastHash, mined[0], mined[1]);
+            } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -108,17 +83,17 @@ public class mine implements Runnable {
     }
 
     /**
-     * @return the data
+     * @return the miningData
      */
-    public String getData() {
-        return data;
+    public String getMiningData() {
+        return miningData;
     }
 
     /**
-     * @param data the data to set
+     * @param miningData the miningData to set
      */
-    public void setData(String data) {
-        this.data = data;
+    public void setMiningData(String miningData) {
+        this.miningData = miningData;
     }
 
     public void startMining() {
