@@ -233,24 +233,10 @@ public class manage extends javax.swing.JFrame {
     @SuppressWarnings("null")
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        //PrintWriter writer = null;
+
         String text = jTextField1.getText();
         jTextField1.setText(null);
-        /*
-        //saber el nº de lineas del fichero
-        File input = new File("contentsBLOCK.txt");
-        Scanner iterate = new Scanner(input);
-        int numLines = 0;
-        while (iterate.hasNextLine()) {
-        String currLine = iterate.nextLine();
-        numLines++;
-        }
-        
-        String fileData = main.readFile("contentsBLOCK.txt");
-        writer = new PrintWriter("contentsBLOCK.txt");
-        writer.println(fileData);
-        writer.println(text);
-         */
+
 
         String current = main.TFG.getCurrentMiningContents();
         if (!current.equals("")) {
@@ -258,7 +244,7 @@ public class manage extends javax.swing.JFrame {
         } else {
             main.TFG.setCurrentMiningContents(text);
         }
-        //writer.close();
+
 
     }//GEN-LAST:event_jButton1ActionPerformed
 

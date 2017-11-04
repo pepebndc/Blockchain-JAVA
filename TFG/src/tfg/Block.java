@@ -40,6 +40,7 @@ public class Block {
 
         //Create an al '0's String to set difficulty
         StringBuilder sb = new StringBuilder(18);
+        
         for (int i = 0; i < diff; i++) {
             sb.append("0");
         }

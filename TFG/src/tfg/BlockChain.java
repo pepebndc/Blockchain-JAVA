@@ -23,7 +23,7 @@ public class BlockChain {
 
     BlockChain(String name) {
         this.name = name;
-        this.diff = 4; //avoid an extreme amount of blocks mined
+        this.diff = 5; //avoid an extreme amount of blocks mined
         chain = new ArrayList<>();
         currentMiningContents = "";
 
