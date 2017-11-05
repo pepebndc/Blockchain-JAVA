@@ -244,6 +244,9 @@ public class manage extends javax.swing.JFrame {
         } else {
             main.TFG.setCurrentMiningContents(text);
         }
+        
+        //notify the network about the change
+        
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -306,6 +309,8 @@ public class manage extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         String diff = String.valueOf(main.TFG.getDiff());
         jTextField3.setText(diff);
+        jLabel1.setText("BLOCKCHAIN: \""+main.TFG.getName()+"\"");
+
         repaint();
     }//GEN-LAST:event_formWindowActivated
 

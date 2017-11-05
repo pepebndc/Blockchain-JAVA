@@ -23,30 +23,10 @@ public class main {
 
     public static void main() throws NoSuchAlgorithmException, IOException {
 
-        //Creating the BlockChain object
-        TFG = new BlockChain("Blockchain of my TFG");
-        TFG.setDiff(4);
-
-        //Manually creating 2 genesis blocks
-        Block genesis1 = new Block(0, currentTime(), "genesis1", "0", "0", "0");
-        TFG.getChain().add(genesis1);
-        Block genesis2 = new Block(1, currentTime(), "genesis2", "0", "0", "0");
-        TFG.getChain().add(genesis2);
-    }
-
-    public static void newBlock(BlockChain chain, String data) throws NoSuchAlgorithmException, FileNotFoundException, IOException {
-        int length = chain.getChain().size();
-        int index = length;
-        int diff = chain.getDiff();
-        String lastHash = chain.getChain().get(length - 1).getHash();
-        String time = currentTime();
-
-        String[] mined = Block.mineBlock(index, time, data, lastHash, diff);
-        Block b = new Block(length, time, data, lastHash, mined[0], mined[1]);
-
-        chain.getChain().add(b);
 
     }
+
+
 
     public static String currentTime() {
 

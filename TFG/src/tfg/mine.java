@@ -39,15 +39,13 @@ public class mine implements Runnable {
 
             int length = getChain().getChain().size();
             int index = length;
-            int diff = getChain().getDiff();
-            String lastHash = getChain().getChain().get(length - 1).getHash();
-            String time = main.currentTime();
+
 
             String[] mined = {"", ""};
 
 
             try {
-                mined = Block.mineBlock(index, time, miningData, lastHash, diff);
+                mined = Block.mineBlock();
             } catch (NoSuchAlgorithmException | FileNotFoundException ex) {
                 Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("pepe1" + index + ex);
@@ -56,9 +54,9 @@ public class mine implements Runnable {
                 System.out.println("pepe2");
             }
             Block B = null;
-            //ADD THE BLOCK TO THE CHAIN
             try {
-                B = new Block(length, time, main.TFG.getCurrentMiningContents(), lastHash, mined[0], mined[1]);
+                //ADD THE BLOCK TO THE CHAIN
+                B = new Block(length, main.currentTime(), main.TFG.getCurrentMiningContents(), main.TFG.getChain().get(index-1).getHash(), mined[0], mined[1]);
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
             }
