@@ -47,10 +47,10 @@ public class TCPserver extends Thread {
 
         //GET CLIENT INFO
         SocketAddress rawClientIP = socket.getRemoteSocketAddress();
-        char c = ':';
-
+        //This gets the addres in the format "/192.168.X.X:(port number)"
+        
         String ClientIP = rawClientIP.toString().substring(1, rawClientIP.toString().indexOf(':'));
-        //String ClientIP = rawClientIP.toString();
+        
         System.out.println("Connected");
 
         CommandMessaje command = null;
@@ -58,7 +58,7 @@ public class TCPserver extends Thread {
 
             try {//READ NEW COMMANDMESSAJE
                 command = (CommandMessaje) inStream.readObject();
-                System.out.println("I have the CommandMessaje");
+                //System.out.println("I have the CommandMessaje");
                 System.out.println("Command received = " + command.getCommand());
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println("Error reading the CommandMessaje");
