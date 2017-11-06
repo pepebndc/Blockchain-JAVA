@@ -7,6 +7,7 @@ package tfg;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,9 +16,9 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author pepeb
  */
-public class Block {
+public class Block implements Serializable {
 
-
+    private static final long serialVersionUID = 5950169519310163575L;
     private int index;
     private String time;
     private String data;
@@ -36,11 +37,12 @@ public class Block {
 
     }
 
-    static String[] mineBlock(int index, String time, String data, String lastHash, int diff) throws NoSuchAlgorithmException, FileNotFoundException, IOException {
+    static String[] mineBlock() throws NoSuchAlgorithmException, FileNotFoundException, IOException {
 
         //Create an al '0's String to set difficulty
         StringBuilder sb = new StringBuilder(18);
-        
+        int diff = main.TFG.getDiff();
+
         for (int i = 0; i < diff; i++) {
             sb.append("0");
         }
@@ -48,11 +50,15 @@ public class Block {
         String hash = "hi";
         int nonceInt = (int) (Math.random() * 1000000000);
         String fileData = "";
+        int index = 0;
+        String time;
+        String lastHash;
 
-        
         //Changing the nonce to match difficulty
         while (!hash.startsWith(code)) {
-
+            index = main.TFG.getChain().size();
+            time = main.currentTime();
+            lastHash = main.TFG.getChain().get(index - 1).getHash();
             fileData = main.TFG.getCurrentMiningContents();
 
             int t = 0;
@@ -65,7 +71,6 @@ public class Block {
 
         }
 
-        
         System.out.println("Block " + index + " has been mined--> " + hash + " //CONTENTS: " + fileData);
 
         String nonceString = String.valueOf(nonceInt);

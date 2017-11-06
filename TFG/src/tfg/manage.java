@@ -9,7 +9,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,6 +67,9 @@ public class manage extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
@@ -233,11 +239,10 @@ public class manage extends javax.swing.JFrame {
     @SuppressWarnings("null")
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-
         String text = jTextField1.getText();
         jTextField1.setText(null);
 
-
+        //change current contents
         String current = main.TFG.getCurrentMiningContents();
         if (!current.equals("")) {
             main.TFG.setCurrentMiningContents(current + "\n" + text);
@@ -245,6 +250,18 @@ public class manage extends javax.swing.JFrame {
             main.TFG.setCurrentMiningContents(text);
         }
 
+        //notify the network about the change
+        Iterator<String> it = main.TFG.getHosts().iterator();
+        while (it.hasNext()) {
+            String host = it.next();
+            try {
+                if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                    TCPclient.sendNewContent(host);
+                }
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -267,6 +284,19 @@ public class manage extends javax.swing.JFrame {
         int diff = Integer.parseInt(jTextField3.getText());
         main.TFG.setDiff(diff);
         System.out.println("New diff:" + diff);
+
+        //notify the network about the change
+        Iterator<String> it = main.TFG.getHosts().iterator();
+        while (it.hasNext()) {
+            String host = it.next();
+            try {
+                if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                    TCPclient.sendNewDiff(host);
+                }
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
@@ -306,15 +336,34 @@ public class manage extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         String diff = String.valueOf(main.TFG.getDiff());
         jTextField3.setText(diff);
+        jLabel1.setText("BLOCKCHAIN: \"" + main.TFG.getName() + "\"");
+
         repaint();
     }//GEN-LAST:event_formWindowActivated
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         jTextField4.setText("CURRENT");
-        jTextArea1.setText(main.TFG.getCurrentMiningContents()+"\n\n-----------------------\nYOU CAN'T EDIT THIS BLOCK\n-----------------------\nTo add a transaction, use the menu.");
+        jTextArea1.setText(main.TFG.getCurrentMiningContents() + "\n\n-----------------------\nYOU CAN'T EDIT THIS BLOCK\n-----------------------\nTo add a transaction, use the menu.");
         jButton5.setEnabled(false);
         this.repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        //send everyone that you are disconecting 
+
+        //notify the network about the change
+        Iterator<String> it = main.TFG.getHosts().iterator();
+        while (it.hasNext()) {
+            String host = it.next();
+            try {
+                if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                    TCPclient.sendDisconect(host);
+                }
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -353,7 +402,6 @@ public class manage extends javax.swing.JFrame {
             }
         });
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
