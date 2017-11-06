@@ -16,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author pepeb
  */
-public class Block implements Serializable{
+public class Block implements Serializable {
 
     private static final long serialVersionUID = 5950169519310163575L;
     private int index;
@@ -41,8 +41,8 @@ public class Block implements Serializable{
 
         //Create an al '0's String to set difficulty
         StringBuilder sb = new StringBuilder(18);
-        int diff=main.TFG.getDiff();
-        
+        int diff = main.TFG.getDiff();
+
         for (int i = 0; i < diff; i++) {
             sb.append("0");
         }
@@ -50,16 +50,15 @@ public class Block implements Serializable{
         String hash = "hi";
         int nonceInt = (int) (Math.random() * 1000000000);
         String fileData = "";
-        int index=0;
+        int index = 0;
         String time;
         String lastHash;
 
-        
         //Changing the nonce to match difficulty
         while (!hash.startsWith(code)) {
-            index=main.TFG.getChain().size();
-            time=main.currentTime();
-            lastHash=main.TFG.getChain().get(index - 1).getHash();
+            index = main.TFG.getChain().size();
+            time = main.currentTime();
+            lastHash = main.TFG.getChain().get(index - 1).getHash();
             fileData = main.TFG.getCurrentMiningContents();
 
             int t = 0;
@@ -72,7 +71,6 @@ public class Block implements Serializable{
 
         }
 
-        
         System.out.println("Block " + index + " has been mined--> " + hash + " //CONTENTS: " + fileData);
 
         String nonceString = String.valueOf(nonceInt);

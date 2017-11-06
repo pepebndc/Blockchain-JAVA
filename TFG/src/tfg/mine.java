@@ -8,7 +8,10 @@ package tfg;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,9 +43,7 @@ public class mine implements Runnable {
             int length = getChain().getChain().size();
             int index = length;
 
-
             String[] mined = {"", ""};
-
 
             try {
                 mined = Block.mineBlock();
@@ -56,12 +57,26 @@ public class mine implements Runnable {
             Block B = null;
             try {
                 //ADD THE BLOCK TO THE CHAIN
-                B = new Block(length, main.currentTime(), main.TFG.getCurrentMiningContents(), main.TFG.getChain().get(index-1).getHash(), mined[0], mined[1]);
+                B = new Block(length, main.currentTime(), main.TFG.getCurrentMiningContents(), main.TFG.getChain().get(index - 1).getHash(), mined[0], mined[1]);
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            //add to our blockchain
             getChain().getChain().add(B);
+
+            //notify the network
+            Iterator<String> it = main.TFG.getHosts().iterator();
+            while (it.hasNext()) {
+                String host = it.next();
+                try {
+                    if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                        TCPclient.sendNewBlock(host, B);
+                    }
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
         }
     }

@@ -28,7 +28,7 @@ public class Client {
 
         while (!isConnected) {
             try {
-                socket = new Socket("192.168.1.140", 4445);
+                socket = new Socket("192.168.1.140", 4444);
                 System.out.println("Connected");
                 isConnected = true;
                 outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -36,6 +36,7 @@ public class Client {
                 System.out.println("Object to be written = " + student);
                 outputStream.writeObject(student);
                 outputStream.flush();
+                System.out.println("flushed");
 
             } catch (SocketException se) {
                 se.printStackTrace();

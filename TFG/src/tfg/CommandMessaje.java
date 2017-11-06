@@ -7,26 +7,28 @@ package tfg;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.net.SocketAddress;
 
 /**
  *
  * @author pepeb
  */
 public class CommandMessaje implements Serializable {
+
     private static final long serialVersionUID = 7526472295622776147L;
-    
+
     private String command;
-    private InetAddress address;
+    private String address;
     private BlockChain blockchain;
     private Block block;
     private String contents;
-    
-    CommandMessaje(String command, InetAddress address, BlockChain BC, Block B, String contents){
-        this.command=command;
-        this.address=address;
-        this.blockchain=BC; 
-        this.block=B;
-        this.contents=contents;
+
+    CommandMessaje(String command, String address, BlockChain BC, Block B, String contents) {
+        this.command = command;
+        this.address = address;
+        this.blockchain = BC;
+        this.block = B;
+        this.contents = contents;
     }
 
     /**
@@ -46,17 +48,16 @@ public class CommandMessaje implements Serializable {
     /**
      * @return the address
      */
-    public InetAddress getAddress() {
+    public String getAddress() {
         return address;
     }
 
     /**
      * @param address the address to set
      */
-    public void setAddress(InetAddress address) {
+    public void setAddress(String address) {
         this.address = address;
     }
-
 
     /**
      * @return the contents
@@ -100,6 +101,4 @@ public class CommandMessaje implements Serializable {
         this.block = block;
     }
 
-
-    
 }

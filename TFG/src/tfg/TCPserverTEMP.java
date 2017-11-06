@@ -11,15 +11,14 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-class TCPserverDDD extends Thread {
+class TCPserverTEMP extends Thread {
+}
+/*
 
     static Socket s;
     private boolean conected;
     static ObjectOutputStream oos;
     static ObjectInputStream ois;
-
-}
-/*
 
     @Override
     public void run() {
@@ -35,9 +34,9 @@ class TCPserverDDD extends Thread {
             System.out.println("error7");
             ObjectOutputStream oo = new ObjectOutputStream(so.getOutputStream());
             ObjectInputStream oi = new ObjectInputStream(so.getInputStream());
-            System.out.println("socket open in 4004 "+so.getInetAddress().getHostAddress());
+            System.out.println("socket open in 4004 " + so.getInetAddress().getHostAddress());
         } catch (IOException e) {
-            System.out.println("Error opening in/out"+e);
+            System.out.println("Error opening in/out" + e);
             return;
         }
         while (isConected()) {
@@ -52,7 +51,7 @@ class TCPserverDDD extends Thread {
             try {
                 command = (CommandMessaje) ois.readObject();
             } catch (IOException | ClassNotFoundException ex) {
-                Logger.getLogger(TCPserverDDD.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(TCPserverTEMP.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             //Command DISCONECTED, take the ip of the sender out of the hosts list
@@ -92,7 +91,7 @@ class TCPserverDDD extends Thread {
                     quit(); //quit connection with the client
                     return;
                 } catch (IOException ex) {
-                    Logger.getLogger(TCPserverDDD.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(TCPserverTEMP.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -160,8 +159,23 @@ class TCPserverDDD extends Thread {
 
     public static void sendNewHostConnect(String ip) throws IOException {
         System.out.println("connect1");
-        connect(ip);
-        quit();
+        ObjectOutputStream oo=null;
+        Socket so=null;
+        try {
+            System.out.println("Error1");
+            so = new Socket("localhost", 406);
+            System.out.println("Error2");
+            oo = new ObjectOutputStream(so.getOutputStream());
+            System.out.println("Error3");
+            //ObjectInputStream oi = new ObjectInputStream(so.getInputStream());
+            System.out.println("Error4");
+
+        } catch (IOException e) {
+            System.out.println("Problems conecting on TCP");
+            System.out.println(e);
+
+        }
+
         System.out.println("connect2");
         String com = "NEW HOST CONNECT";
         InetAddress a = null;
@@ -170,9 +184,11 @@ class TCPserverDDD extends Thread {
         String c = null;
 
         CommandMessaje command = new CommandMessaje(com, a, bc, b, c);
-        oos.writeObject(command);
-        oos.flush();
-        quit();
+        oo.writeObject(command);
+        oo.flush();
+        oo.close();
+        so.close();
+        
     }
 
     public static void sendNewHostRecieve(InetAddress ip) {
@@ -194,12 +210,12 @@ class TCPserverDDD extends Thread {
     public static void connect(String ip) {
         try {
             System.out.println("Error1");
-            Socket so = new Socket(ip, 4004);
-            System.out.println("Error1");
-            ObjectOutputStream oo = new ObjectOutputStream(so.getOutputStream());
-            System.out.println("Error1");
-            ObjectInputStream oi = new ObjectInputStream(so.getInputStream());
-            System.out.println("Error1");
+            Socket so = new Socket("localhost", 403);
+            System.out.println("Error2");
+            ObjectOutputStream oos = new ObjectOutputStream(so.getOutputStream());
+            System.out.println("Error3");
+            ObjectInputStream ois = new ObjectInputStream(so.getInputStream());
+            System.out.println("Error4");
 
         } catch (IOException e) {
             System.out.println("Problems conecting on TCP");
@@ -222,14 +238,14 @@ class TCPserverDDD extends Thread {
     /**
      * @return the conected
  */
-///  public boolean isConected() {
-///      return conected;
+// public boolean isConected() {
+//     return conected;
 // }
 
 /**
  * @param conected the conected to set
  */
-//  public void setConected(boolean conected) {
-//     this.conected = conected;
+//   public void setConected(boolean conected) {
+//      this.conected = conected;
 //  }
  // fin clase SesionTCP

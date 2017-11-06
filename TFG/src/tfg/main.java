@@ -23,10 +23,7 @@ public class main {
 
     public static void main() throws NoSuchAlgorithmException, IOException {
 
-
     }
-
-
 
     public static String currentTime() {
 

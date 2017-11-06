@@ -7,6 +7,7 @@ package tfg;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.net.SocketAddress;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,24 +17,25 @@ import java.util.List;
  *
  * @author pepeb
  */
-public class BlockChain implements Serializable{
+public class BlockChain implements Serializable {
 
     private static final long serialVersionUID = 5950169519310163575L;
     private String name;
     private int diff;
     private List<Block> chain;
     private String currentMiningContents;
-    private List<InetAddress> hosts;
+    private List<String> hosts;
 
     BlockChain(String name) {
         this.name = name;
         this.diff = 5; //avoid an extreme amount of blocks mined
         this.chain = new ArrayList<>();
         this.currentMiningContents = "";
-        this.hosts=new ArrayList<>();
+        this.hosts = new ArrayList<>();
 
     }
-        public boolean validateChain() throws NoSuchAlgorithmException {
+
+    public boolean validateChain() throws NoSuchAlgorithmException {
         String[] hashes = new String[this.getChain().size()];
         int length = this.getChain().size();
 
@@ -57,12 +59,12 @@ public class BlockChain implements Serializable{
                 if (index != 1) {
                     if (index < (length - 1)) {
                         if (!hash.equals(newHash)) {
-                            System.out.println("Different recomputed hash in block " + (index-1));
+                            System.out.println("Different recomputed hash in block " + (index - 1));
                             return false;
                         }
 
                         if (!hashPreviousBlock.equals(hashes[(index - 1)])) {
-                            System.out.println("Different previous hash in block " + (index-1));
+                            System.out.println("Different previous hash in block " + (index - 1));
                             return false;
                         }
                     }
@@ -133,14 +135,14 @@ public class BlockChain implements Serializable{
     /**
      * @return the hosts
      */
-    public List<InetAddress> getHosts() {
+    public List<String> getHosts() {
         return hosts;
     }
 
     /**
      * @param hosts the hosts to set
      */
-    public void setHosts(List<InetAddress> hosts) {
+    public void setHosts(List<String> hosts) {
         this.hosts = hosts;
     }
 
