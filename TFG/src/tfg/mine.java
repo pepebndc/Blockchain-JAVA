@@ -37,11 +37,9 @@ public class mine implements Runnable {
 
             //VACIAR ARCHIVO DE ANTES
             PrintWriter writer = null;
+            int length = 0;
 
             main.TFG.setCurrentMiningContents("");
-
-            int length = getChain().getChain().size();
-            int index = length;
 
             String[] mined = {"", "", ""};
 
@@ -49,27 +47,39 @@ public class mine implements Runnable {
                 mined = Block.mineBlock();
             } catch (NoSuchAlgorithmException | FileNotFoundException ex) {
                 Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("pepe1" + index + ex);
+
             } catch (IOException ex) {
                 Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("pepe2");
+
             }
             Block B = null;
             try {
                 //ADD THE BLOCK TO THE CHAIN
-                B = new Block(length, Long.valueOf(mined[2]), main.TFG.getCurrentMiningContents(), main.TFG.getChain().get(index - 1).getHash(), mined[0], mined[1]);
-                //CHECK FOR DIFFICULTY CHANGES NEEDED
+                length = main.TFG.getChain().size();
+                B = new Block(length, Long.valueOf(mined[2]), main.TFG.getCurrentMiningContents(), main.TFG.getChain().get(length - 1).getHash(), mined[0], mined[1]);
+                //CHECK FOR DIFFICULTY CHANGES NEEDED IF BLOCK>15
 
-                long thisTime = Long.valueOf(mined[2]);
-                long prevBlockTime = main.TFG.getChain().get((length - 10)).getTime();
-                long difference = thisTime - prevBlockTime;
-                int differenceInSeconds = (int) difference / 1000;
+                if (length%10==0) {
+                    long thisTime = Long.valueOf(mined[2]);
+                    long prevBlockTime = main.TFG.getChain().get((length - 10)).getTime();
+                    long difference = thisTime - prevBlockTime;
+                    int differenceInSeconds = (int) difference / 1000;
+                    System.out.println("difference in seconds: " + differenceInSeconds);
+                    /*
+                    double computation = main.TFG.getDiff() * Math.pow(600, 2) / (Math.pow(differenceInSeconds, 2));
+                    int newDiff = (int) Math.round(computation);
+                    System.out.println("new diff: "+newDiff);
+                     */
+                    int newDiff = 5;
+                    if (differenceInSeconds > 700) {
+                        newDiff = main.TFG.getDiff() - 1;
+                    }
 
-                double computation = main.TFG.getDiff() * Math.pow(600, 2) / (Math.pow(differenceInSeconds, 2));
-                int newDiff = (int) Math.round(computation);
-
-                if (main.TFG.getDiff() != newDiff) {
-                    //set the new diff
+                    if (differenceInSeconds < 500) {
+                        newDiff = main.TFG.getDiff() + 1;
+                    }
+                    //set the new diff 
+                    System.out.println("new diff after comprobation: " + newDiff);
                     main.TFG.setDiff(newDiff);
                     //notify the network about the change
                     Iterator<String> it = main.TFG.getHosts().iterator();

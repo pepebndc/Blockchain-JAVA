@@ -71,7 +71,7 @@ public class Block implements Serializable {
 
         }
 
-        System.out.println("Block " + index + " has been mined--> " + hash + " //CONTENTS: " + fileData);
+        System.out.println("Block " + index + " has been mined at "+main.currentTime()+"--> " + hash + " //CONTENTS: " + fileData);
 
         String nonceString = String.valueOf(nonceInt);
 
