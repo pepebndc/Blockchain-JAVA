@@ -189,9 +189,9 @@ public class start extends javax.swing.JFrame {
             main.TFG.setDiff(5);
 
             //Manually creating 2 genesis blocks
-            Block genesis1 = new Block(0, main.currentTime(), "genesis1", "0", "0", "0");
+            Block genesis1 = new Block(0, System.currentTimeMillis(), "genesis1", "0", "0", "0");
             main.TFG.getChain().add(genesis1);
-            Block genesis2 = new Block(1, main.currentTime(), "genesis2", "0", "0", "0");
+            Block genesis2 = new Block(1, System.currentTimeMillis(), "genesis2", "0", "0", "0");
             main.TFG.getChain().add(genesis2);
 
             //Manually adding my IP to the host list

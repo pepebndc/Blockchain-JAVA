@@ -6,8 +6,6 @@
 package tfg;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.SocketAddress;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,7 +46,7 @@ public class BlockChain implements Serializable {
             String hash = b.getHash();
             int index = b.getIndex();
             String hashPreviousBlock = b.getLastHash();
-            String time = b.getTime();
+            long time = b.getTime();
             String data = b.getData();
             int nonce = b.getNonce();
 
