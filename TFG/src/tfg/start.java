@@ -201,7 +201,7 @@ public class start extends javax.swing.JFrame {
             //start the server Thread
             server = new Thread(new serverManager());
             server.start();
-            System.out.println("tcp iniciado");
+            System.out.println("tcp server started");
 
             //start the mining Thread
             mining = new Thread(new mine(main.TFG));
@@ -242,7 +242,7 @@ public class start extends javax.swing.JFrame {
         //start the server TCP
         server = new Thread(new serverManager());
         server.start();
-        System.out.println("tcp iniciado");
+        System.out.println("tcp server started");
         //fin start server
         //send the connect request
         TCPclient.sendNewHostConnect(ip);

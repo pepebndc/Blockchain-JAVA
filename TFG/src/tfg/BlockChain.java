@@ -6,6 +6,7 @@
 package tfg;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +34,7 @@ public class BlockChain implements Serializable {
 
     }
 
-    public boolean validateChain() throws NoSuchAlgorithmException {
+    public boolean validateChain() throws NoSuchAlgorithmException, UnsupportedEncodingException {
         String[] hashes = new String[this.getChain().size()];
         int length = this.getChain().size();
 

@@ -8,6 +8,7 @@ package tfg;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -40,7 +41,7 @@ public class Block implements Serializable {
     static String[] mineBlock() throws NoSuchAlgorithmException, FileNotFoundException, IOException {
 
         //Create an al '0's String to set difficulty
-        StringBuilder sb = new StringBuilder(18);
+        StringBuilder sb = new StringBuilder(128);
         int diff = main.TFG.getDiff();
 
         for (int i = 0; i < diff; i++) {
@@ -79,11 +80,13 @@ public class Block implements Serializable {
 
     }
 
-    static String computeHash(int index, long time, String data, String lastHash, int nonceInt) throws NoSuchAlgorithmException {
+    static String computeHash(int index, long time, String data, String lastHash, int nonceInt) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
-        String plaintext;
-
+        String plaintext="";
+        String hashtext="";
         plaintext = index + time + data + lastHash + Integer.toString(nonceInt);
+        
+        /* MD5
         MessageDigest m = MessageDigest.getInstance("MD5");
         m.reset();
         m.update(plaintext.getBytes());
@@ -95,6 +98,22 @@ public class Block implements Serializable {
         while (hashtext.length() < 32) {
             hashtext = "0" + hashtext;
         }
+        */
+        
+        //SHA-512
+        
+            try {
+         MessageDigest md = MessageDigest.getInstance("SHA-512");         
+         byte[] bytes = md.digest(plaintext.getBytes("UTF-8"));
+         StringBuilder sb = new StringBuilder();
+         for(int i=0; i< bytes.length ;i++){
+            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+         }
+         hashtext = sb.toString();
+        } 
+       catch (NoSuchAlgorithmException e){
+        e.printStackTrace();
+       }
 
         return hashtext;
     }

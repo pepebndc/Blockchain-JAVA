@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
@@ -315,7 +316,7 @@ public class manage extends javax.swing.JFrame {
         String text = jTextField4.getText();
         if (!text.equals("")) {
             int num = Integer.parseInt(text);
-            if (num > main.TFG.getChain().size()) {
+            if (num > main.TFG.getChain().size()-1) {
 
                 jTextArea1.setText("Block not yet mined \nDO NOT TOUCH ANYTHING");
                 jButton5.setEnabled(false);
@@ -340,6 +341,8 @@ public class manage extends javax.swing.JFrame {
             main.TFG.getChain().get(num).setHash(MODhash);
 
         } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
         }
 
