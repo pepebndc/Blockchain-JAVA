@@ -189,12 +189,13 @@ public class start extends javax.swing.JFrame {
             main.TFG.setDiff(5);
 
             //Manually creating 2 genesis blocks
-            Block genesis1 = new Block(0, main.currentTime(), "genesis1", "0", "0", "0");
+            Block genesis1 = new Block(0, System.currentTimeMillis(), "genesis1", "0", "0", "0");
             main.TFG.getChain().add(genesis1);
-            Block genesis2 = new Block(1, main.currentTime(), "genesis2", "0", "0", "0");
+            Block genesis2 = new Block(1, System.currentTimeMillis(), "genesis2", "0", "0", "0");
             main.TFG.getChain().add(genesis2);
 
             //Manually adding my IP to the host list
+            System.out.println("My IP: "+InetAddress.getLocalHost().getHostAddress());
             main.TFG.getHosts().add(InetAddress.getLocalHost().getHostAddress());
 
             //start the server Thread
@@ -246,9 +247,7 @@ public class start extends javax.swing.JFrame {
         //send the connect request
         TCPclient.sendNewHostConnect(ip);
         System.out.println("new host messaje sent");
-        while (main.TFG.getName() == null) {
-            System.out.println("waiting for the blockchain");
-        }
+        
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -257,6 +256,7 @@ public class start extends javax.swing.JFrame {
         manage.setVisible(true);
         mining = new Thread(new mine(main.TFG));
         mining.start();
+        
         System.out.println("new window opened and started mining");
     }//GEN-LAST:event_jButton3ActionPerformed
 

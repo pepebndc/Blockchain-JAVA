@@ -20,13 +20,13 @@ public class Block implements Serializable {
 
     private static final long serialVersionUID = 5950169519310163575L;
     private int index;
-    private String time;
+    private long time;
     private String data;
     private String lastHash;
     private String hash;
     private String nonce;
 
-    Block(int index, String time, String data, String lastHash, String hash, String nonce) throws NoSuchAlgorithmException {
+    Block(int index, long time, String data, String lastHash, String hash, String nonce) throws NoSuchAlgorithmException {
 
         this.index = index;
         this.time = time;
@@ -51,13 +51,13 @@ public class Block implements Serializable {
         int nonceInt = (int) (Math.random() * 1000000000);
         String fileData = "";
         int index = 0;
-        String time;
+        long time=0;
         String lastHash;
 
         //Changing the nonce to match difficulty
         while (!hash.startsWith(code)) {
             index = main.TFG.getChain().size();
-            time = main.currentTime();
+            time = System.currentTimeMillis();
             lastHash = main.TFG.getChain().get(index - 1).getHash();
             fileData = main.TFG.getCurrentMiningContents();
 
@@ -71,15 +71,15 @@ public class Block implements Serializable {
 
         }
 
-        System.out.println("Block " + index + " has been mined--> " + hash + " //CONTENTS: " + fileData);
+        System.out.println("Block " + index + " has been mined at "+main.currentTime()+"--> " + hash + " //CONTENTS: " + fileData);
 
         String nonceString = String.valueOf(nonceInt);
 
-        return new String[]{hash, nonceString};
+        return new String[]{hash, nonceString,String.valueOf(time) };
 
     }
 
-    static String computeHash(int index, String time, String data, String lastHash, int nonceInt) throws NoSuchAlgorithmException {
+    static String computeHash(int index, long time, String data, String lastHash, int nonceInt) throws NoSuchAlgorithmException {
 
         String plaintext;
 
@@ -116,14 +116,14 @@ public class Block implements Serializable {
     /**
      * @return the time
      */
-    public String getTime() {
+    public long getTime() {
         return time;
     }
 
     /**
      * @param time the time to set
      */
-    public void setTime(String time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
