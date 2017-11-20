@@ -35,10 +35,6 @@ public class mine implements Runnable {
 
         while (mining) {
 
-            //VACIAR ARCHIVO DE ANTES
-            PrintWriter writer = null;
-            int length = 0;
-
             main.TFG.setCurrentMiningContents("");
 
             String[] mined = {"", "", ""};
@@ -50,38 +46,34 @@ public class mine implements Runnable {
 
             } catch (IOException ex) {
                 Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
-
             }
             Block B = null;
             try {
                 //ADD THE BLOCK TO THE CHAIN
-                length = main.TFG.getChain().size();
+                int length = main.TFG.getChain().size();
                 B = new Block(length, Long.valueOf(mined[2]), main.TFG.getCurrentMiningContents(), main.TFG.getChain().get(length - 1).getHash(), mined[0], mined[1]);
-                //CHECK FOR DIFFICULTY CHANGES NEEDED IF BLOCK>15
 
-                if (length%10==0) {
+                //CHECK FOR DIFFICULTY CHANGES NEEDED IF BLOCK IS MULTIPLE OF 10
+                if (length % 10 == 0) {
                     long thisTime = Long.valueOf(mined[2]);
                     long prevBlockTime = main.TFG.getChain().get((length - 10)).getTime();
                     long difference = thisTime - prevBlockTime;
                     int differenceInSeconds = (int) difference / 1000;
                     System.out.println("difference in seconds: " + differenceInSeconds);
-                    /*
-                    double computation = main.TFG.getDiff() * Math.pow(600, 2) / (Math.pow(differenceInSeconds, 2));
-                    int newDiff = (int) Math.round(computation);
-                    System.out.println("new diff: "+newDiff);
-                     */
+
                     int newDiff = 5;
-                    if (differenceInSeconds > 700) {
+                    if (differenceInSeconds > 750) {
                         newDiff = main.TFG.getDiff() - 1;
                     }
 
-                    if (differenceInSeconds < 500) {
+                    if (differenceInSeconds < 450) {
                         newDiff = main.TFG.getDiff() + 1;
                     }
-                    //set the new diff 
+                    //set the new diff
                     System.out.println("new diff after comprobation: " + newDiff);
                     main.TFG.setDiff(newDiff);
-                    //notify the network about the change
+
+                    //notify the network about the new difficulty
                     Iterator<String> it = main.TFG.getHosts().iterator();
                     while (it.hasNext()) {
                         String host = it.next();
@@ -93,29 +85,32 @@ public class mine implements Runnable {
                             Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                }//end of difficulty changes
+
+                //EVERY MINED BLOCK:add to our blockchain and empty mining contents
+                main.TFG.getChain().add(B);
+                main.TFG.setCurrentMiningContents("");
+
+                //notify the network about the new block and the new (empty) mining contents
+                Iterator<String> it = main.TFG.getHosts().iterator();
+                while (it.hasNext()) {
+                    String host = it.next();
+                    try {
+                        if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                            TCPclient.sendNewBlock(host, B);
+                            TCPclient.sendNewContent(host);
+                        }
+                    } catch (UnknownHostException ex) {
+                        Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            //add to our blockchain
-            getChain().getChain().add(B);
-
-            //notify the network
-            Iterator<String> it = main.TFG.getHosts().iterator();
-            while (it.hasNext()) {
-                String host = it.next();
-                try {
-                    if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
-                        TCPclient.sendNewBlock(host, B);
-                    }
-                } catch (UnknownHostException ex) {
-                    Logger.getLogger(mine.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
         }
+
     }
 
     /**
