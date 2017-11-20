@@ -119,6 +119,9 @@ public class TCPserver extends Thread {
             if (command.getCommand().equals("NEW BLOCK")) {
                 System.out.println("There is a new block in the network");
                 main.TFG.getChain().add(command.getBlock());
+                //erase current mining contents
+                main.TFG.setCurrentMiningContents("");
+                
                 return;
             }
             //THE HOST WANTS TO DISCONECT, DROP FROM HOST LIST

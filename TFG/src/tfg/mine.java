@@ -150,7 +150,7 @@ public class mine implements Runnable {
         mining = true;
     }
 
-    public void terminarMining() {
+    public void endMining() {
         mining = false;
     }
 
