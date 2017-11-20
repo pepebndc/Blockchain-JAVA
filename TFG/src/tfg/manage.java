@@ -141,7 +141,8 @@ public class manage extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("view current");
+        jButton6.setText("View current");
+        jButton6.setToolTipText("");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
