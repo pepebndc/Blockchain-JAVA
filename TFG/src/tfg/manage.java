@@ -62,6 +62,12 @@ public class manage extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jButton3 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JSeparator();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
+        jLabel9 = new javax.swing.JLabel();
 
         jLabel3.setText("jLabel3");
 
@@ -150,29 +156,20 @@ public class manage extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel6.setText("YOUR INFORMATION:");
+
+        jLabel7.setText("Blockchain Address:");
+
+        jLabel8.setText("IP Address:");
+
+        jLabel9.setText("Pepe Blasco - ETSIT UPV 2017/18");
+        jLabel9.setToolTipText("");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(213, 213, 213))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addGap(35, 35, 35)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jSeparator3))
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(62, 62, 62)
                 .addComponent(jButton2)
@@ -184,24 +181,59 @@ public class manage extends javax.swing.JFrame {
                 .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton6)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 23, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(81, 81, 81)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField4))
-                    .addComponent(jLabel5)
-                    .addComponent(jButton3)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jButton5)))
-                .addGap(55, 55, 55)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addGap(47, 47, 47)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(35, 35, 35)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(213, 213, 213))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jSeparator2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(81, 81, 81)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextField4))
+                                    .addComponent(jLabel5)
+                                    .addComponent(jButton3)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jButton5)))
+                                .addGap(55, 55, 55)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addComponent(jLabel6))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(83, 83, 83)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel7))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator4)
+                            .addComponent(jSeparator5)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -232,18 +264,28 @@ public class manage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
-                        .addGap(40, 40, 40))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(jButton3))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel8)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9)
+                .addContainerGap())
         );
 
         pack();
@@ -256,15 +298,15 @@ public class manage extends javax.swing.JFrame {
         jTextField1.setText(null);
 
         //change current contents
-        String current = main.TFG.getCurrentMiningContents();
+        String current = main.getTFG().getCurrentMiningContents();
         if (!current.equals("")) {
-            main.TFG.setCurrentMiningContents(current + "\n" + text);
+            main.getTFG().setCurrentMiningContents(current + "\n" + text);
         } else {
-            main.TFG.setCurrentMiningContents(text);
+            main.getTFG().setCurrentMiningContents(text);
         }
 
         //notify the network about the change
-        Iterator<String> it = main.TFG.getHosts().iterator();
+        Iterator<String> it = main.getTFG().getHosts().iterator();
         while (it.hasNext()) {
             String host = it.next();
             try {
@@ -281,7 +323,7 @@ public class manage extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             System.out.print("Is the Blockchain valid? - ");
-            if (main.TFG.validateChain()) {
+            if (main.getTFG().validateChain()) {
                 System.out.println("YES");
                 jTextPane1.setText("VALID");
             } else {
@@ -290,16 +332,18 @@ public class manage extends javax.swing.JFrame {
             }
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         int diff = Integer.parseInt(jTextField3.getText());
-        main.TFG.setDiff(diff);
+        main.getTFG().setDiff(diff);
         System.out.println("New diff:" + diff);
 
         //notify the network about the change
-        Iterator<String> it = main.TFG.getHosts().iterator();
+        Iterator<String> it = main.getTFG().getHosts().iterator();
         while (it.hasNext()) {
             String host = it.next();
             try {
@@ -316,12 +360,12 @@ public class manage extends javax.swing.JFrame {
         String text = jTextField4.getText();
         if (!text.equals("")) {
             int num = Integer.parseInt(text);
-            if (num > main.TFG.getChain().size()-1) {
+            if (num > main.getTFG().getChain().size()-1) {
 
                 jTextArea1.setText("Block not yet mined \nDO NOT TOUCH ANYTHING");
                 jButton5.setEnabled(false);
             } else {
-                String contenidos = main.TFG.getChain().get(num).getData();
+                String contenidos = main.getTFG().getChain().get(num).getData();
                 jTextArea1.setText(contenidos);
                 jButton5.setEnabled(true);
             }
@@ -336,9 +380,9 @@ public class manage extends javax.swing.JFrame {
         String contents = jTextArea1.getText();
 
         try {
-            main.TFG.getChain().get(num).setData(contents);
-            String MODhash = Block.computeHash(num, main.TFG.getChain().get(num).getTime(), contents, main.TFG.getChain().get(num).getLastHash(), main.TFG.getChain().get(num).getNonce());
-            main.TFG.getChain().get(num).setHash(MODhash);
+            main.getTFG().getChain().get(num).setData(contents);
+            String MODhash = Block.computeHash(num, main.getTFG().getChain().get(num).getTime(), contents, main.getTFG().getChain().get(num).getLastHash(), main.getTFG().getChain().get(num).getNonce());
+            main.getTFG().getChain().get(num).setHash(MODhash);
 
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
@@ -349,16 +393,22 @@ public class manage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        String diff = String.valueOf(main.TFG.getDiff());
-        jTextField3.setText(diff);
-        jLabel1.setText("BLOCKCHAIN: \"" + main.TFG.getName() + "\"");
-
-        repaint();
+        try {
+            String diff = String.valueOf(main.getTFG().getDiff());
+            jTextField3.setText(diff);
+            jLabel1.setText("BLOCKCHAIN: \"" + main.getTFG().getName() + "\"");
+            jLabel7.setText("Blockchain Address: \"" + main.getLocalUser().getAddress() + "\"");
+            jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
+            
+            repaint();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowActivated
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         jTextField4.setText("CURRENT");
-        jTextArea1.setText(main.TFG.getCurrentMiningContents() + "\n\n-----------------------\nYOU CAN'T EDIT THIS BLOCK\n-----------------------\nTo add a transaction, use the menu.");
+        jTextArea1.setText(main.getTFG().getCurrentMiningContents() + "\n\n-----------------------\nYOU CAN'T EDIT THIS BLOCK\n-----------------------\nTo add a transaction, use the menu.");
         jButton5.setEnabled(false);
         this.repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -367,7 +417,7 @@ public class manage extends javax.swing.JFrame {
         //send everyone that you are disconecting 
 
         //notify the network about the change
-        Iterator<String> it = main.TFG.getHosts().iterator();
+        Iterator<String> it = main.getTFG().getHosts().iterator();
         while (it.hasNext()) {
             String host = it.next();
             try {
@@ -381,7 +431,7 @@ public class manage extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        jTextField3.setText(Integer.toString(main.TFG.getDiff()));
+        jTextField3.setText(Integer.toString(main.getTFG().getDiff()));
         repaint();
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -415,7 +465,7 @@ public class manage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                BlockChain TFG = main.TFG;
+                BlockChain TFG = main.getTFG();
 
                 new manage().setVisible(true);
 
@@ -435,11 +485,17 @@ public class manage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField3;

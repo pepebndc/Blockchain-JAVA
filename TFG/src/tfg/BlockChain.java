@@ -24,13 +24,15 @@ public class BlockChain implements Serializable {
     private List<Block> chain;
     private String currentMiningContents;
     private List<String> hosts;
-
+    private List<User> users;
+    
     BlockChain(String name) {
         this.name = name;
         this.diff = 5; //avoid an extreme amount of blocks mined
         this.chain = new ArrayList<>();
         this.currentMiningContents = "";
         this.hosts = new ArrayList<>();
+        this.users = new ArrayList<>();
 
     }
 
@@ -143,6 +145,20 @@ public class BlockChain implements Serializable {
      */
     public void setHosts(List<String> hosts) {
         this.hosts = hosts;
+    }
+
+    /**
+     * @return the users
+     */
+    public List<User> getUsers() {
+        return users;
+    }
+
+    /**
+     * @param users the users to set
+     */
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
 }

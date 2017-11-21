@@ -5,11 +5,6 @@
  */
 package tfg;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -17,9 +12,7 @@ import javax.swing.JFrame;
  * @author pepeb
  */
 public class start extends javax.swing.JFrame {
-
-    Thread mining;
-    Thread server;
+    
 
     /**
      * Creates new form start
@@ -37,228 +30,156 @@ public class start extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSeparator2 = new javax.swing.JSeparator();
-        jTextField1 = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
         jButton2 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jButton6 = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+
+        jButton3.setFont(new java.awt.Font("Roboto Medium", 1, 14)); // NOI18N
+        jButton3.setText("NEW USER");
+
+        jButton4.setFont(new java.awt.Font("Roboto Medium", 1, 14)); // NOI18N
+        jButton4.setText("NEW USER");
+
+        jButton5.setFont(new java.awt.Font("Roboto Medium", 1, 14)); // NOI18N
+        jButton5.setText("NEW USER");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
-        });
 
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField1KeyReleased(evt);
-            }
-        });
+        jLabel1.setFont(new java.awt.Font("Roboto Black", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("BLOCKCHAIN");
+        jLabel1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
-        jLabel1.setText("Name of the Blockchain");
-
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton1.setText("CREATE A BLOCKCHAIN");
+        jButton1.setFont(new java.awt.Font("Roboto Medium", 1, 14)); // NOI18N
+        jButton1.setText("CREATE A NEW BLOCKCHAIN");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton2.setText("JOIN A NETWORK");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.setFont(new java.awt.Font("Roboto Medium", 1, 14)); // NOI18N
+        jButton2.setText("NEW USER");
 
-        jTextField2.setToolTipText("");
-        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField2KeyReleased(evt);
-            }
-        });
-
-        jLabel2.setText("IP of a network node");
+        jLabel2.setText("Pepe Blasco - ETSIT UPV 2017/18");
         jLabel2.setToolTipText("");
 
-        jLabel3.setText("Pepe Blasco - ETSIT UPV");
+        jButton6.setFont(new java.awt.Font("Roboto Medium", 1, 14)); // NOI18N
+        jButton6.setText("EXISTING USER");
 
-        jButton3.setText("manage");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+        jLabel4.setFont(new java.awt.Font("Roboto Medium", 0, 18)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("NETWORK");
+        jLabel4.setToolTipText("");
+        jLabel4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        jLabel5.setFont(new java.awt.Font("Roboto Medium", 0, 18)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("JOIN AN EXISTING");
+        jLabel5.setToolTipText("");
+        jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(77, 77, 77))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(69, 69, 69))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(152, 152, 152)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(jButton1)))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator2)
+                    .addComponent(jSeparator1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(jButton1)
-                                .addGap(35, 35, 35)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(218, 218, 218)
+                                .addComponent(jLabel3))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(61, 61, 61)
-                                .addComponent(jButton2)
-                                .addGap(56, 56, 56)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(53, 53, 53)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(46, 46, 46)
+                                .addComponent(jButton2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(jButton6)))
+                        .addGap(0, 40, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(104, 104, 104)
-                                .addComponent(jButton3)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jSeparator1))))
+                        .addComponent(jLabel2)))
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(57, 57, 57)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(229, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(12, 12, 12)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addGap(64, 64, 64)))
                 .addGap(18, 18, 18)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3))
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addGap(12, 12, 12))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(135, Short.MAX_VALUE)
+                    .addComponent(jLabel5)
+                    .addGap(84, 84, 84)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        jButton1.setEnabled(false);
-        jButton2.setEnabled(false);
-        jTextField2.setText("192.168.1.140");
-    }//GEN-LAST:event_formWindowOpened
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JFrame manage = new manage();
-        manage.setVisible(true);
+        JFrame createNewBC = new createNewBC();
+        createNewBC.setVisible(true);
         this.setVisible(false);
-        String text = jTextField1.getText();
-
-        try {
-            //Creating the BlockChain object
-            main.TFG = new BlockChain(text);
-            main.TFG.setDiff(5);
-
-            //Manually creating 2 genesis blocks
-            Block genesis1 = new Block(0, System.currentTimeMillis(), "genesis1", "0", "0", "0");
-            main.TFG.getChain().add(genesis1);
-            Block genesis2 = new Block(1, System.currentTimeMillis(), "genesis2", "0", "0", "0");
-            main.TFG.getChain().add(genesis2);
-
-            //Manually adding my IP to the host list
-            System.out.println("My IP: "+InetAddress.getLocalHost().getHostAddress());
-            main.TFG.getHosts().add(InetAddress.getLocalHost().getHostAddress());
-
-            //start the server Thread
-            server = new Thread(new serverManager());
-            server.start();
-            System.out.println("tcp server started");
-
-            //start the mining Thread
-            mining = new Thread(new mine(main.TFG));
-            mining.start();
-
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(start.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        String text = jTextField1.getText();
-
-        if (!text.equals("")) {
-            jButton1.setEnabled(true);
-        } else {
-            jButton1.setEnabled(false);
-        }
-        this.repaint();
-    }//GEN-LAST:event_jTextField1KeyReleased
-
-    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
-        String text = jTextField2.getText();
-
-        if (!text.equals("")) {
-            jButton2.setEnabled(true);
-        } else {
-            jButton2.setEnabled(false);
-        }
-        this.repaint();
-    }//GEN-LAST:event_jTextField2KeyReleased
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String ip = jTextField2.getText();
-        //open the sever to be able to listen
-        //start the server TCP
-        server = new Thread(new serverManager());
-        server.start();
-        System.out.println("tcp server started");
-        //fin start server
-        //send the connect request
-        TCPclient.sendNewHostConnect(ip);
-        System.out.println("new host messaje sent");
-        
-
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        JFrame manage = new manage();
-        manage.setVisible(true);
-        mining = new Thread(new mine(main.TFG));
-        mining.start();
-        
-        System.out.println("new window opened and started mining");
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -299,13 +220,16 @@ public class start extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

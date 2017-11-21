@@ -14,6 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,9 +71,14 @@ public class TCPserver extends Thread {
             //  2.response to the new host, sendind the blockchain
             if (command.getCommand().equals("NEW HOST CONNECT")) {
                 System.out.println("I AM ASKED TO CONNECT BY : "+ClientIP+"(" + rawClientIP.toString()+")");
-                main.TFG.getHosts().add(ClientIP);
+                
+
+                
+                //add the new host to the blockchain
+                main.getTFG().getHosts().add(ClientIP);
+                
                 //notify the rest of the network (NEW HOST ADD)
-                Iterator<String> it = main.TFG.getHosts().iterator();
+                Iterator<String> it = main.getTFG().getHosts().iterator();
                 while (it.hasNext()) {
                     String host = it.next();
                     try {
@@ -94,33 +100,33 @@ public class TCPserver extends Thread {
             //I HAVE BEEN ACCEPTED TO THE NETWORK, APPLY THE BLOCKCHAIN
             if (command.getCommand().equals("NEW HOST ACCEPTED")) {
                 System.out.println("I HAVE BEEN ACCEPTED");
-                main.TFG = command.getBlockchain();
+                main.setTFG(command.getBlockchain());
                 return;
             }
             //A NEW HOST HAS JOINED, ADD TO THE HOST LIST
             if (command.getCommand().equals("NEW HOST ADD")) {
                 System.out.println("A new host has joined");
-                main.TFG.getHosts().add(command.getAddress());
+                main.getTFG().getHosts().add(command.getAddress());
                 return;
             }
             //THERE IS A NEW CONTENT TO MINE, UPDATE MINING CONTENTS
             if (command.getCommand().equals("ADD CONTENT")) {
                 System.out.println("There is a new content to mine: "+command.getContents());
-                main.TFG.setCurrentMiningContents(command.getContents());
+                main.getTFG().setCurrentMiningContents(command.getContents());
                 return;
             }
             //THERE IS A NEW DIFFICULTY
             if (command.getCommand().equals("DIFF")) {
                 System.out.println("There is a new difficulty in the network");
-                main.TFG.setDiff(Integer.parseInt(command.getContents()));
+                main.getTFG().setDiff(Integer.parseInt(command.getContents()));
                 return;
             }
             //THERE IS A NEW BLOCK
             if (command.getCommand().equals("NEW BLOCK")) {
                 System.out.println("There is a new block in the network");
-                main.TFG.getChain().add(command.getBlock());
+                main.getTFG().getChain().add(command.getBlock());
                 //erase current mining contents
-                main.TFG.setCurrentMiningContents("");
+                main.getTFG().setCurrentMiningContents("");
                 
                 return;
             }
@@ -128,7 +134,7 @@ public class TCPserver extends Thread {
             if (command.getCommand().equals("DISCONECT")) {
                 System.out.println("The host " + ClientIP + " wants to disconect");
 
-                Iterator<String> it = main.TFG.getHosts().iterator();
+                Iterator<String> it = main.getTFG().getHosts().iterator();
                 while (it.hasNext()) {
                     String host = it.next();
                     if (host.equals(ClientIP)) {

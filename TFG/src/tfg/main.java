@@ -19,7 +19,8 @@ import java.util.Iterator;
  */
 public class main {
 
-    public static BlockChain TFG;
+    static BlockChain TFG;
+    private static LocalUser localUser;
 
     public static void main() throws NoSuchAlgorithmException, IOException {
 
@@ -73,4 +74,34 @@ public class main {
 
         }
     }
+
+    /**
+     * @return the TFG
+     */
+    public static BlockChain getTFG() {
+        return TFG;
+    }
+
+    /**
+     * @param aTFG the TFG to set
+     */
+    public static void setTFG(BlockChain aTFG) {
+        TFG = aTFG;
+    }
+
+    /**
+     * @return the localUser
+     */
+    public static LocalUser getLocalUser() {
+        return localUser;
+    }
+
+    /**
+     * @param aLocalUser the localUser to set
+     */
+    public static void setLocalUser(LocalUser aLocalUser) {
+        localUser = aLocalUser;
+    }
 }
+
+ 

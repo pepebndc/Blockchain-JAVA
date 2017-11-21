@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class TCPclient {
 
-    public static void sendNewHostConnect(String ip) {
+    public static void sendNewHostConnect(String ip, String address, String priv) {
         try {
             //TO DO- ASK TO JOIN THE NETWORK
 
@@ -32,10 +32,10 @@ public class TCPclient {
             }
 
             String com = "NEW HOST CONNECT";
-            String a = null;
+            String a = address;
             BlockChain bc = null;
             Block b = null;
-            String c = null;
+            String c = priv;
 
             CommandMessaje command = new CommandMessaje(com, a, bc, b, c);
             oo.writeObject(command);
@@ -65,7 +65,7 @@ public class TCPclient {
 
             String com = "NEW HOST ACCEPTED";
             String a = null;
-            BlockChain bc = main.TFG;
+            BlockChain bc = main.getTFG();
             Block b = null;
             String c = null;
 
@@ -131,7 +131,7 @@ public class TCPclient {
             String a = null;
             BlockChain bc = null;
             Block b = null;
-            String c = main.TFG.getCurrentMiningContents();
+            String c = main.getTFG().getCurrentMiningContents();
 
             CommandMessaje command = new CommandMessaje(com, a, bc, b, c);
             oo.writeObject(command);
@@ -163,7 +163,7 @@ public class TCPclient {
             String a = null;
             BlockChain bc = null;
             Block b = null;
-            String c = String.valueOf(main.TFG.getDiff());
+            String c = String.valueOf(main.getTFG().getDiff());
 
             CommandMessaje command = new CommandMessaje(com, a, bc, b, c);
             oo.writeObject(command);

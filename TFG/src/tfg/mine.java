@@ -27,7 +27,7 @@ public class mine implements Runnable {
 
     public mine(BlockChain chain) {
         this.chain = chain;
-        this.miningData = main.TFG.getCurrentMiningContents();
+        this.miningData = main.getTFG().getCurrentMiningContents();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class mine implements Runnable {
 
         while (mining) {
 
-            main.TFG.setCurrentMiningContents("");
+            main.getTFG().setCurrentMiningContents("");
 
             String[] mined = {"", "", ""};
 
@@ -50,31 +50,31 @@ public class mine implements Runnable {
             Block B = null;
             try {
                 //ADD THE BLOCK TO THE CHAIN
-                int length = main.TFG.getChain().size();
-                B = new Block(length, Long.valueOf(mined[2]), main.TFG.getCurrentMiningContents(), main.TFG.getChain().get(length - 1).getHash(), mined[0], mined[1]);
+                int length = main.getTFG().getChain().size();
+                B = new Block(length, Long.valueOf(mined[2]), main.getTFG().getCurrentMiningContents(), main.getTFG().getChain().get(length - 1).getHash(), mined[0], mined[1]);
 
                 //CHECK FOR DIFFICULTY CHANGES NEEDED IF BLOCK IS MULTIPLE OF 10
                 if (length % 10 == 0) {
                     long thisTime = Long.valueOf(mined[2]);
-                    long prevBlockTime = main.TFG.getChain().get((length - 10)).getTime();
+                    long prevBlockTime = main.getTFG().getChain().get((length - 10)).getTime();
                     long difference = thisTime - prevBlockTime;
                     int differenceInSeconds = (int) difference / 1000;
                     System.out.println("difference in seconds: " + differenceInSeconds);
 
                     int newDiff = 5;
                     if (differenceInSeconds > 750) {
-                        newDiff = main.TFG.getDiff() - 1;
+                        newDiff = main.getTFG().getDiff() - 1;
                     }
 
                     if (differenceInSeconds < 450) {
-                        newDiff = main.TFG.getDiff() + 1;
+                        newDiff = main.getTFG().getDiff() + 1;
                     }
                     //set the new diff
                     System.out.println("new diff after comprobation: " + newDiff);
-                    main.TFG.setDiff(newDiff);
+                    main.getTFG().setDiff(newDiff);
 
                     //notify the network about the new difficulty
-                    Iterator<String> it = main.TFG.getHosts().iterator();
+                    Iterator<String> it = main.getTFG().getHosts().iterator();
                     while (it.hasNext()) {
                         String host = it.next();
                         try {
@@ -88,11 +88,11 @@ public class mine implements Runnable {
                 }//end of difficulty changes
 
                 //EVERY MINED BLOCK:add to our blockchain and empty mining contents
-                main.TFG.getChain().add(B);
-                main.TFG.setCurrentMiningContents("");
+                main.getTFG().getChain().add(B);
+                main.getTFG().setCurrentMiningContents("");
 
                 //notify the network about the new block and the new (empty) mining contents
-                Iterator<String> it = main.TFG.getHosts().iterator();
+                Iterator<String> it = main.getTFG().getHosts().iterator();
                 while (it.hasNext()) {
                     String host = it.next();
                     try {

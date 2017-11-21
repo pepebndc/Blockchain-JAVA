@@ -42,7 +42,7 @@ public class Block implements Serializable {
 
         //Create an al '0's String to set difficulty
         StringBuilder sb = new StringBuilder(128);
-        int diff = main.TFG.getDiff();
+        int diff = main.getTFG().getDiff();
 
         for (int i = 0; i < diff; i++) {
             sb.append("0");
@@ -57,10 +57,10 @@ public class Block implements Serializable {
 
         //Changing the nonce to match difficulty
         while (!hash.startsWith(code)) {
-            index = main.TFG.getChain().size();
+            index = main.getTFG().getChain().size();
             time = System.currentTimeMillis();
-            lastHash = main.TFG.getChain().get(index - 1).getHash();
-            fileData = main.TFG.getCurrentMiningContents();
+            lastHash = main.getTFG().getChain().get(index - 1).getHash();
+            fileData = main.getTFG().getCurrentMiningContents();
 
             int t = 0;
             while (!hash.startsWith(code) && t != 10) {
