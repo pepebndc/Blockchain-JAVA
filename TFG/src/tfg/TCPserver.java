@@ -62,7 +62,7 @@ public class TCPserver extends Thread {
 
         String ClientIP = rawClientIP.toString().substring(1, rawClientIP.toString().indexOf(':'));
 
-        System.out.println("Connected");
+        //System.out.println("Connected");
 
         CommandMessaje command = null;
         while (isListening()) {

@@ -27,6 +27,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class joinBCexistingUser extends javax.swing.JFrame {
 
     Thread server;
+    Thread mining;
 
     /**
      * Creates new form joinBCexistingUser
@@ -185,6 +186,8 @@ public class joinBCexistingUser extends javax.swing.JFrame {
                 LocalUser loadedUser = (LocalUser) oin.readObject();
                 main.setLocalUser(loadedUser);
                 System.out.println("New address loaded: " + main.getLocalUser().getAddress());
+                System.out.println("Public : " + main.getLocalUser().getPublicKey());
+                
                 jButton2.setEnabled(true);
                 jButton3.setEnabled(true);
             } catch (FileNotFoundException ex) {
@@ -229,6 +232,10 @@ public class joinBCexistingUser extends javax.swing.JFrame {
         JFrame manage = new manage();
         manage.setVisible(true);
         this.setVisible(false);
+
+        //start the mining Thread
+        mining = new Thread(new mine(main.getTFG()));
+        mining.start();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated

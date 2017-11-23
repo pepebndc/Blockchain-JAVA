@@ -293,7 +293,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("DISCONECT messaje sent to " + endPoint);
+            System.out.println("please DISCONECT messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -328,7 +328,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("DISCONECT messaje sent to " + endPoint);
+            System.out.println("SEND CHALLENGE messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -363,7 +363,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("DISCONECT messaje sent to " + endPoint);
+            System.out.println("CHALLENGE RESPONSE messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }

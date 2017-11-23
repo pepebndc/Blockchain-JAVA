@@ -327,7 +327,7 @@ public class manage extends javax.swing.JFrame {
 
         String text = main.getLocalUser().getAddress() + " ("+main.getLocalUser().getName()+") : " +jTextField1.getText();
         jTextField1.setText(null);
-
+        System.out.println (text);
         //change current contents
         String current = main.getTFG().getCurrentMiningContents();
         if (!current.equals("")) {
