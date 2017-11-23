@@ -61,11 +61,8 @@ public class mine implements Runnable {
                     int differenceInSeconds = (int) difference / 1000;
                     System.out.println("difference in seconds: " + differenceInSeconds);
 
-<<<<<<< HEAD
                     int newDiff = main.TFG.getDiff();
-=======
-                    int newDiff = main.TFG.getDiff();;
->>>>>>> 2fbd668d1c9bf33f84fd770f02b737aeee5b24b2
+
                     if (differenceInSeconds > 750) {
                         newDiff = main.getTFG().getDiff() - 1;
                     }
