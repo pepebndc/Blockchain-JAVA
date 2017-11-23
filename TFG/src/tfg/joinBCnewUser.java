@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 public class joinBCnewUser extends javax.swing.JFrame {
 
     Thread server;
+    Thread mining;
 
     /**
      * Creates new form joinBCnewUser
@@ -172,9 +173,9 @@ public class joinBCnewUser extends javax.swing.JFrame {
             LocalUser newLocalUser = LocalUser.create(jTextField3.getText());
             main.setLocalUser(newLocalUser);
             User newUser = new User(newLocalUser.getName(), newLocalUser.getAddress(), newLocalUser.getPublicKey());
-            System.out.println("User: "+newLocalUser.getName()+ "Address: "+newLocalUser.getAddress());
-            System.out.println("Public : "+ newLocalUser.getPublicKey() );
-            System.out.println("User object: "+newUser);
+            System.out.println("User: " + newLocalUser.getName() + "Address: " + newLocalUser.getAddress());
+            System.out.println("Public : " + newLocalUser.getPublicKey());
+            System.out.println("User object: " + newUser);
 
             //open the sever to be able to listen
             //start the server TCP
@@ -183,7 +184,8 @@ public class joinBCnewUser extends javax.swing.JFrame {
             System.out.println("tcp server started");
 
             //send the connect request        
-            TCPclient.sendNewHostConnect(ip, newLocalUser.getAddress(), newLocalUser.getPublicKey());
+            //TCPclient.sendNewHostConnect(ip, newLocalUser.getAddress(), newLocalUser.getPublicKey());
+            TCPclient.sendNewHostConnect(ip);
             System.out.println("new host request messaje sent");
 
         } catch (NoSuchAlgorithmException ex) {
@@ -195,6 +197,10 @@ public class joinBCnewUser extends javax.swing.JFrame {
         JFrame manage = new manage();
         manage.setVisible(true);
         this.setVisible(false);
+
+        //start the mining Thread
+        mining = new Thread(new mine(main.getTFG()));
+        mining.start();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened

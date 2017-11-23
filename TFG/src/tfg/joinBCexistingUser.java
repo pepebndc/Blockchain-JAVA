@@ -216,7 +216,8 @@ public class joinBCexistingUser extends javax.swing.JFrame {
 
             //send the connect request
             User newUser = new User(main.getLocalUser().getName(), main.getLocalUser().getAddress(), main.getLocalUser().getPublicKey());
-            TCPclient.sendNewHostConnect(ip, main.getLocalUser().getAddress(), main.getLocalUser().getPublicKey());
+            //TCPclient.sendNewHostConnect(ip, main.getLocalUser().getAddress(), main.getLocalUser().getPublicKey());
+            TCPclient.sendNewHostConnect(ip);
             System.out.println("new host messaje sent");
 
         } catch (NoSuchAlgorithmException ex) {

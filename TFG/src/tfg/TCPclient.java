@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class TCPclient {
 
-    public static void sendNewHostConnect(String ip, String address, PublicKey pubKey) {
+    public static void sendNewHostConnect(String ip) {
         try {
             //TO DO- ASK TO JOIN THE NETWORK
 
@@ -37,15 +37,15 @@ public class TCPclient {
             BlockChain bc = null;
             Block b = null;
             String c = null;
-            PublicKey k = pubKey;
-            String n =address;
+            PublicKey k = null;
+            String n =null;
 
             CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
             oo.writeObject(command);
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("new host connect messaje sent to " + ip);
+            System.out.println("new host messaje sent to " + ip);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -68,9 +68,9 @@ public class TCPclient {
 
             String com = "NEW HOST ACCEPTED";
             String a = null;
-            BlockChain bc = main.getTFG();
+            BlockChain bc = main.TFG;
             Block b = null;
-            String c = null;          
+            String c = null;
             PublicKey k = null;
             String n =null;
 
@@ -85,7 +85,7 @@ public class TCPclient {
         }
     }
 
-    public static void sendNewDiff(String endPoint) {
+    public static void sendNewHostADD(String ipNewHost, String endPoint) {
         //TO DO- SEND TO EVERY HOST ON THE LIST THE NEW HOST LIST
 
         try {
@@ -100,76 +100,8 @@ public class TCPclient {
                 System.out.println(e);
             }
 
-            String com = "DIFF";
-            String a = null;
-            BlockChain bc = null;
-            Block b = null;
-            String c = Integer.toString(main.TFG.getDiff());
-            PublicKey k = null;
-            String n =null;
-
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
-            oo.writeObject(command);
-            oo.flush();
-            oo.close();
-            so.close();
-            System.out.println("new DIFF messaje sent to " + endPoint);
-        } catch (IOException ex) {
-            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public static void sendNewUserADD(String endPoint,User newUser) {
-        //TO DO- SEND TO EVERY HOST ON THE LIST THE NEW USER LIST
-
-        try {
-
-            ObjectOutputStream oo = null;
-            Socket so = null;
-            try {
-                so = new Socket(endPoint, 4001);
-                oo = new ObjectOutputStream(so.getOutputStream());
-            } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
-                System.out.println(e);
-            }
-
-            String com = "NEW USER ADD";
-            String a = null;
-            BlockChain bc = null;
-            Block b = null;
-            String c = null;
-            PublicKey k = null;
-            String n =null;
-
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
-            oo.writeObject(command);
-            oo.flush();
-            oo.close();
-            so.close();
-            System.out.println("new user ADD messaje sent to " + endPoint);
-        } catch (IOException ex) {
-            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public static void sendNewHostADD(String newHost, String endPoint) {
-        //TO DO- SEND TO EVERY HOST ON THE LIST THE NEW USER LIST
-
-        try {
-
-            ObjectOutputStream oo = null;
-            Socket so = null;
-            try {
-                so = new Socket(endPoint, 4001);
-                oo = new ObjectOutputStream(so.getOutputStream());
-            } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
-                System.out.println(e);
-            }
-
             String com = "NEW HOST ADD";
-            String a = newHost;
+            String a = ipNewHost;
             BlockChain bc = null;
             Block b = null;
             String c = null;
@@ -187,81 +119,8 @@ public class TCPclient {
         }
     }
 
-    public static void sendNewChallenge(String endPoint, String codedChallenge) {
-        //TO DO- GET THE NEW CONTENTS AND SENDS TO EVERYONE
-
-        try {
-
-            ObjectOutputStream oo = null;
-            Socket so = null;
-            try {
-                so = new Socket(endPoint, 4001);
-                oo = new ObjectOutputStream(so.getOutputStream());
-            } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
-                System.out.println(e);
-            }
-
-            System.out.println("before messaje");
-            String com = "NEW HOST CHALLENGE ";
-            String a = null;
-            BlockChain bc = null;
-            Block b = null;
-            String c = codedChallenge;
-            PublicKey k = null;
-            String n =null;
-
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
-            System.out.println("messaje created");
-            oo.writeObject(command);
-            oo.flush();
-            oo.close();
-            so.close();
-            System.out.println("new challenge messaje sent to " + endPoint + " - " + c);
-        } catch (IOException ex) {
-            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return;
-    }
-
-    public static void sendNewChallengeSolved(String endPoint, String decodedChallenge, User user) {
-        //TO DO- GET THE NEW CONTENTS AND SENDS TO EVERYONE
-
-        try {
-
-            ObjectOutputStream oo = null;
-            Socket so = null;
-            try {
-                so = new Socket(endPoint, 4001);
-                oo = new ObjectOutputStream(so.getOutputStream());
-            } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
-                System.out.println(e);
-            }
-
-            String com = "NEW HOST CHALLENGE RESPONSE";
-            String a = null;
-            BlockChain bc = null;
-            Block b = null;
-            String c = decodedChallenge;
-            PublicKey k = null;
-            String n =null;
-
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
-            oo.writeObject(command);
-            oo.flush();
-            oo.close();
-            so.close();
-            System.out.println("new challenge resolved messaje sent to " + endPoint + " - " + c);
-        } catch (IOException ex) {
-            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    
-
     public static void sendNewContent(String endPoint) {
-        //TO DO- GET THE NEW DIFF AND SEND TO EVERYONE
+        //TO DO- GET THE NEW CONTENTS AND SENDS TO EVERYONE
 
         try {
 
@@ -279,7 +138,7 @@ public class TCPclient {
             String a = null;
             BlockChain bc = null;
             Block b = null;
-            String c = main.getTFG().getCurrentMiningContents();
+            String c = main.TFG.getCurrentMiningContents();
             PublicKey k = null;
             String n =null;
 
@@ -288,7 +147,41 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("new contents messaje sent to " + endPoint+" -->"+c);
+            System.out.println("new contents messaje sent to " + endPoint+" - "+c);
+        } catch (IOException ex) {
+            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void sendNewDiff(String endPoint) {
+        //TO DO- GET THE NEW DIFF AND SEND TO EVERYONE
+
+        try {
+
+            ObjectOutputStream oo = null;
+            Socket so = null;
+            try {
+                so = new Socket(endPoint, 4001);
+                oo = new ObjectOutputStream(so.getOutputStream());
+            } catch (IOException e) {
+                System.out.println("Problems conecting on TCP");
+                System.out.println(e);
+            }
+
+            String com = "DIFF";
+            String a = null;
+            BlockChain bc = null;
+            Block b = null;
+            String c = String.valueOf(main.TFG.getDiff()); 
+            PublicKey k = null;
+            String n =null;
+
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
+            oo.writeObject(command);
+            oo.flush();
+            oo.close();
+            so.close();
+            System.out.println("new difficulty messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -322,7 +215,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("NEW BLOCK("+B.getIndex()+") messaje sent to " + endPoint);
+            System.out.println("NEW BLOCK messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -351,7 +244,7 @@ public class TCPclient {
             PublicKey k = null;
             String n =null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);            
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
             oo.writeObject(command);
             oo.flush();
             oo.close();
