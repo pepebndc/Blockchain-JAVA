@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -72,7 +73,7 @@ public class Block implements Serializable {
 
         }
 
-        System.out.println("Block " + index + " has been mined at "+main.currentTime()+"--> " + hash + " //CONTENTS: " + fileData);
+        System.out.println("Block " + index + " has been mined at "+main.currentTime()+" by address: "+main.getLocalUser().getAddress()+ " @ IP: " +InetAddress.getLocalHost().getHostAddress()+" --> " + hash + " //CONTENTS: " + fileData);
 
         String nonceString = String.valueOf(nonceInt);
 

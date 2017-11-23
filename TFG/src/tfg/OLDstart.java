@@ -199,8 +199,8 @@ public class OLDstart extends javax.swing.JFrame {
             main.getTFG().getHosts().add(InetAddress.getLocalHost().getHostAddress());
             
             //Add myself to the Users list
-            User myUser = new User ();
-            main.getTFG().getUsers().add(myUser);
+            //User myUser = new User ();
+            //main.getTFG().getUsers().add(myUser);
 
             //start the server Thread
             server = new Thread(new serverManager());
@@ -249,7 +249,7 @@ public class OLDstart extends javax.swing.JFrame {
         System.out.println("tcp server started");
         //fin start server
         //send the connect request
-        TCPclient.sendNewHostConnect(ip);
+        //TCPclient.sendNewHostConnect(ip);
         System.out.println("new host messaje sent");
         
 

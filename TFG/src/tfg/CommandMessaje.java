@@ -8,6 +8,7 @@ package tfg;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.SocketAddress;
+import java.security.PublicKey;
 
 /**
  *
@@ -22,13 +23,17 @@ public class CommandMessaje implements Serializable {
     private BlockChain blockchain;
     private Block block;
     private String contents;
+    private PublicKey pubKey;
+    private String name;
 
-    CommandMessaje(String command, String address, BlockChain BC, Block B, String contents) {
+    CommandMessaje(String command, String address, BlockChain BC, Block B, String contents, PublicKey pubKey, String name) {
         this.command = command;
         this.address = address;
         this.blockchain = BC;
         this.block = B;
         this.contents = contents;
+        this.pubKey = pubKey;
+        this.name=name;
     }
 
     /**
@@ -100,5 +105,35 @@ public class CommandMessaje implements Serializable {
     public void setBlock(Block block) {
         this.block = block;
     }
+
+    /**
+     * @return the pubKey
+     */
+    public PublicKey getPubKey() {
+        return pubKey;
+    }
+
+    /**
+     * @param pubKey the pubKey to set
+     */
+    public void setPubKey(PublicKey pubKey) {
+        this.pubKey = pubKey;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
 
 }

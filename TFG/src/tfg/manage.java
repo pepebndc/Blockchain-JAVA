@@ -6,8 +6,12 @@
 package tfg;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -17,7 +21,11 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -68,6 +76,8 @@ public class manage extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel9 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
 
         jLabel3.setText("jLabel3");
 
@@ -166,6 +176,20 @@ public class manage extends javax.swing.JFrame {
         jLabel9.setText("Pepe Blasco - ETSIT UPV 2017/18");
         jLabel9.setToolTipText("");
 
+        jButton7.setText("Save credentials");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setText("Load credentials");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,9 +242,6 @@ public class manage extends javax.swing.JFrame {
                                 .addGap(55, 55, 55)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(53, 53, 53)
-                                .addComponent(jLabel6))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(83, 83, 83)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
@@ -233,7 +254,14 @@ public class manage extends javax.swing.JFrame {
                             .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSeparator4)
                             .addComponent(jSeparator5)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton8)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -276,7 +304,10 @@ public class manage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton7)
+                    .addComponent(jButton8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -360,7 +391,7 @@ public class manage extends javax.swing.JFrame {
         String text = jTextField4.getText();
         if (!text.equals("")) {
             int num = Integer.parseInt(text);
-            if (num > main.getTFG().getChain().size()-1) {
+            if (num > main.getTFG().getChain().size() - 1) {
 
                 jTextArea1.setText("Block not yet mined \nDO NOT TOUCH ANYTHING");
                 jButton5.setEnabled(false);
@@ -399,7 +430,7 @@ public class manage extends javax.swing.JFrame {
             jLabel1.setText("BLOCKCHAIN: \"" + main.getTFG().getName() + "\"");
             jLabel7.setText("Blockchain Address: \"" + main.getLocalUser().getAddress() + "\"");
             jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
-            
+
             repaint();
         } catch (UnknownHostException ex) {
             Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
@@ -434,6 +465,93 @@ public class manage extends javax.swing.JFrame {
         jTextField3.setText(Integer.toString(main.getTFG().getDiff()));
         repaint();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("./"));
+        int actionDialog = chooser.showSaveDialog(this);
+        if (actionDialog == JFileChooser.APPROVE_OPTION) {
+            File fileName = new File(chooser.getSelectedFile() + ".BCpepe");
+            if (fileName == null) {
+                return;
+            }
+            if (fileName.exists()) {
+                actionDialog = JOptionPane.showConfirmDialog(this,
+                        "Replace existing file?");
+                // may need to check for cancel option as well
+                if (actionDialog == JOptionPane.NO_OPTION) {
+                    return;
+                }
+            }
+            // okay to write file      
+
+            FileOutputStream fileOut = null;
+            try {
+                fileOut = new FileOutputStream(fileName);
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(main.getLocalUser());
+                out.close();
+                fileOut.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    fileOut.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        JFileChooser fileopen = new JFileChooser();
+        FileFilter filter = new FileNameExtensionFilter("Blockchain files", "BCpepe");
+        fileopen.addChoosableFileFilter(filter);
+
+        int ret = fileopen.showDialog(null, "Open file");
+
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            File file = fileopen.getSelectedFile();
+            String credentialsPath = file.getAbsolutePath();
+
+            FileInputStream in = null;
+            try {
+                in = new FileInputStream(credentialsPath);
+                ObjectInputStream oin = new ObjectInputStream(in);
+                LocalUser loadedUser = (LocalUser) oin.readObject();
+                main.setLocalUser(loadedUser);
+                System.out.println("New address loaded: " + main.getLocalUser().getAddress());
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    in.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            try {
+                String diff = String.valueOf(main.getTFG().getDiff());
+                jTextField3.setText(diff);
+                jLabel1.setText("BLOCKCHAIN: \"" + main.getTFG().getName() + "\"");
+                jLabel7.setText("Blockchain Address: \"" + main.getLocalUser().getAddress() + "\"");
+                jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
+
+                repaint();
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+    }//GEN-LAST:event_jButton8ActionPerformed
+    }
 
     /**
      * @param args the command line arguments
@@ -480,6 +598,8 @@ public class manage extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -71,12 +71,22 @@ public class start extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Roboto Medium", 1, 14)); // NOI18N
         jButton2.setText("NEW USER");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Pepe Blasco - ETSIT UPV 2017/18");
         jLabel2.setToolTipText("");
 
         jButton6.setFont(new java.awt.Font("Roboto Medium", 1, 14)); // NOI18N
         jButton6.setText("EXISTING USER");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Roboto Medium", 0, 18)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -180,6 +190,18 @@ public class start extends javax.swing.JFrame {
         createNewBC.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        JFrame joinBCnewUser = new joinBCnewUser();
+        joinBCnewUser.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        JFrame joinBCexistingUser = new joinBCexistingUser();
+        joinBCexistingUser.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments

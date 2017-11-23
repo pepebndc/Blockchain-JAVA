@@ -5,6 +5,7 @@
  */
 package tfg;
 
+import java.io.Serializable;
 import java.security.KeyPair;
 import java.security.*;
 import java.util.Random;
@@ -13,7 +14,7 @@ import java.util.Random;
  *
  * @author pepeb
  */
-public class LocalUser {
+public class LocalUser implements Serializable {
 
     /**
      * @return the name
