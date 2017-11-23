@@ -25,8 +25,10 @@ public class CommandMessaje implements Serializable {
     private String contents;
     private PublicKey pubKey;
     private String name;
+    private byte [] encoded;
+    
 
-    CommandMessaje(String command, String address, BlockChain BC, Block B, String contents, PublicKey pubKey, String name) {
+    CommandMessaje(String command, String address, BlockChain BC, Block B, String contents, PublicKey pubKey, String name, byte[] encoded) {
         this.command = command;
         this.address = address;
         this.blockchain = BC;
@@ -34,6 +36,7 @@ public class CommandMessaje implements Serializable {
         this.contents = contents;
         this.pubKey = pubKey;
         this.name=name;
+        this.encoded=encoded;
     }
 
     /**
@@ -132,6 +135,20 @@ public class CommandMessaje implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the encoded
+     */
+    public byte[] getEncoded() {
+        return encoded;
+    }
+
+    /**
+     * @param encoded the encoded to set
+     */
+    public void setEncoded(byte[] encoded) {
+        this.encoded = encoded;
     }
 
 

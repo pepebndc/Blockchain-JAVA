@@ -21,6 +21,7 @@ public class main {
 
     static BlockChain TFG;
     private static LocalUser localUser;
+    static String challengeStored;
 
     public static void main() throws NoSuchAlgorithmException, IOException {
 

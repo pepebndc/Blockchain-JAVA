@@ -184,8 +184,8 @@ public class joinBCnewUser extends javax.swing.JFrame {
             System.out.println("tcp server started");
 
             //send the connect request        
-            //TCPclient.sendNewHostConnect(ip, newLocalUser.getAddress(), newLocalUser.getPublicKey());
-            TCPclient.sendNewHostConnect(ip);
+            TCPclient.sendNewHostConnect(ip, newLocalUser.getAddress(), newLocalUser.getPublicKey());
+            //TCPclient.sendNewHostConnect(ip);
             System.out.println("new host request messaje sent");
 
         } catch (NoSuchAlgorithmException ex) {

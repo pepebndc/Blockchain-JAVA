@@ -325,7 +325,7 @@ public class manage extends javax.swing.JFrame {
     @SuppressWarnings("null")
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        String text = jTextField1.getText();
+        String text = main.getLocalUser().getAddress() + " ("+main.getLocalUser().getName()+") : " +jTextField1.getText();
         jTextField1.setText(null);
 
         //change current contents

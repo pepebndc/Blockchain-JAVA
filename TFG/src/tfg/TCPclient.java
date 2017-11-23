@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  */
 public class TCPclient {
 
-    public static void sendNewHostConnect(String ip) {
+    public static void sendNewHostConnect(String ip, String address, PublicKey pubKey) {
         try {
             //TO DO- ASK TO JOIN THE NETWORK
 
@@ -33,14 +33,15 @@ public class TCPclient {
             }
 
             String com = "NEW HOST CONNECT";
-            String a = null;
+            String a = address;
             BlockChain bc = null;
             Block b = null;
             String c = null;
-            PublicKey k = null;
-            String n =null;
+            PublicKey k = pubKey;
+            String n = null;
+            byte[] e = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -72,9 +73,10 @@ public class TCPclient {
             Block b = null;
             String c = null;
             PublicKey k = null;
-            String n =null;
+            String n = null;
+            byte[] e = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -106,14 +108,50 @@ public class TCPclient {
             Block b = null;
             String c = null;
             PublicKey k = null;
-            String n =null;
+            String n = null;
+            byte[] e = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
             oo.writeObject(command);
             oo.flush();
             oo.close();
             so.close();
             System.out.println("new host ADD messaje sent to " + endPoint);
+        } catch (IOException ex) {
+            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void sendNewUserADD(String endPoint, User newUser) {
+        //TO DO- SEND TO EVERY HOST ON THE LIST THE NEW HOST LIST
+
+        try {
+
+            ObjectOutputStream oo = null;
+            Socket so = null;
+            try {
+                so = new Socket(endPoint, 4001);
+                oo = new ObjectOutputStream(so.getOutputStream());
+            } catch (IOException e) {
+                System.out.println("Problems conecting on TCP");
+                System.out.println(e);
+            }
+
+            String com = "NEW USER ADD";
+            String a = newUser.getAddress();
+            BlockChain bc = null;
+            Block b = null;
+            String c = null;
+            PublicKey k = newUser.getPublicKey();
+            String n = newUser.getName();
+            byte[] e = null;
+
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            oo.writeObject(command);
+            oo.flush();
+            oo.close();
+            so.close();
+            System.out.println("new user ADD messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -140,14 +178,17 @@ public class TCPclient {
             Block b = null;
             String c = main.TFG.getCurrentMiningContents();
             PublicKey k = null;
-            String n =null;
+            String n = null;
+            byte[] e = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
             oo.writeObject(command);
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("new contents messaje sent to " + endPoint+" - "+c);
+            if (!c.equals("")) {
+                System.out.println("new contents messaje sent to " + endPoint + " - " + c);
+            }
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -172,11 +213,12 @@ public class TCPclient {
             String a = null;
             BlockChain bc = null;
             Block b = null;
-            String c = String.valueOf(main.TFG.getDiff()); 
+            String c = String.valueOf(main.TFG.getDiff());
             PublicKey k = null;
-            String n =null;
+            String n = null;
+            byte[] e = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -208,9 +250,10 @@ public class TCPclient {
             Block b = B;
             String c = null;
             PublicKey k = null;
-            String n =null;
+            String n = null;
+            byte[] e = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -242,9 +285,115 @@ public class TCPclient {
             Block b = null;
             String c = null;
             PublicKey k = null;
-            String n =null;
+            String n = null;
+            byte[] e = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            oo.writeObject(command);
+            oo.flush();
+            oo.close();
+            so.close();
+            System.out.println("DISCONECT messaje sent to " + endPoint);
+        } catch (IOException ex) {
+            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void sendChallenge(String endPoint, byte[] challenge) {
+        // TO DO- SEND A DISCONECT SIGNAL TO EVERYONE
+
+        try {
+
+            ObjectOutputStream oo = null;
+            Socket so = null;
+            try {
+                so = new Socket(endPoint, 4001);
+                oo = new ObjectOutputStream(so.getOutputStream());
+            } catch (IOException e) {
+                System.out.println("Problems conecting on TCP");
+                System.out.println(e);
+            }
+
+            String com = "NEW HOST CHALLENGE";
+            String a = null;
+            BlockChain bc = null;
+            Block b = null;
+            String c = null;
+            PublicKey k = null;
+            String n = null;
+            byte[] e = challenge;
+
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            oo.writeObject(command);
+            oo.flush();
+            oo.close();
+            so.close();
+            System.out.println("DISCONECT messaje sent to " + endPoint);
+        } catch (IOException ex) {
+            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void sendChallengeResponse(String endPoint, String decrypted, String userName, String userAddress, PublicKey userPubKey) {
+        // TO DO- SEND A DISCONECT SIGNAL TO EVERYONE
+
+        try {
+
+            ObjectOutputStream oo = null;
+            Socket so = null;
+            try {
+                so = new Socket(endPoint, 4001);
+                oo = new ObjectOutputStream(so.getOutputStream());
+            } catch (IOException e) {
+                System.out.println("Problems conecting on TCP");
+                System.out.println(e);
+            }
+
+            String com = "NEW HOST SOLUTION";
+            String a = userAddress;
+            BlockChain bc = null;
+            Block b = null;
+            String c = decrypted;
+            PublicKey k = userPubKey;
+            String n = userName;
+            byte[] e = null;
+
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            oo.writeObject(command);
+            oo.flush();
+            oo.close();
+            so.close();
+            System.out.println("DISCONECT messaje sent to " + endPoint);
+        } catch (IOException ex) {
+            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void sendFailedChallenge(String endPoint) {
+        // TO DO- SEND A DISCONECT SIGNAL TO EVERYONE
+
+        try {
+
+            ObjectOutputStream oo = null;
+            Socket so = null;
+            try {
+                so = new Socket(endPoint, 4001);
+                oo = new ObjectOutputStream(so.getOutputStream());
+            } catch (IOException e) {
+                System.out.println("Problems conecting on TCP");
+                System.out.println(e);
+            }
+
+            String com = "NEW HOST SOLUTION FAILED";
+            String a = null;
+            BlockChain bc = null;
+            Block b = null;
+            String c = null;
+            PublicKey k = null;
+            String n = null;
+            byte[] e = null;
+
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
             oo.writeObject(command);
             oo.flush();
             oo.close();
