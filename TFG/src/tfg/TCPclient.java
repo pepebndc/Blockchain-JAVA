@@ -205,6 +205,45 @@ public class TCPclient {
         }
     }
 
+    public static void sendNewPendingTransaction(String endPoint) {
+        //TO DO- GET THE NEW CONTENTS AND SENDS TO EVERYONE
+
+        try {
+
+            ObjectOutputStream oo = null;
+            Socket so = null;
+            try {
+                so = new Socket(endPoint, 4001);
+                oo = new ObjectOutputStream(so.getOutputStream());
+            } catch (IOException e) {
+                System.out.println("Problems conecting on TCP");
+                System.out.println(e);
+            }
+
+            String com = "PENDING TRANSACTION";
+            String a = null;
+            BlockChain bc = null;
+            Block b = null;
+            String c = null;
+            PublicKey k = null;
+            String n = null;
+            byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = main.TFG.getPendingTransactions();
+
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            oo.writeObject(command);
+            oo.flush();
+            oo.close();
+            so.close();
+
+            System.out.println("new pending transaction messaje sent to " + endPoint);
+
+        } catch (IOException ex) {
+            Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public static void sendNewDiff(String endPoint) {
         //TO DO- GET THE NEW DIFF AND SEND TO EVERYONE
 

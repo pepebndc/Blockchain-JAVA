@@ -27,6 +27,7 @@ public class BlockChain implements Serializable {
     private List<Transaction> currentMiningContents;
     private List<String> hosts;
     private List<User> users;
+    private List<Transaction> pendingTransactions;
     
     BlockChain(String name) {
         this.name = name;
@@ -35,6 +36,7 @@ public class BlockChain implements Serializable {
         this.currentMiningContents = new ArrayList<>();
         this.hosts = new ArrayList<>();
         this.users = new ArrayList<>();
+        this.pendingTransactions = new ArrayList<>();
 
     }
 
@@ -161,6 +163,20 @@ public class BlockChain implements Serializable {
      */
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    /**
+     * @return the pendingTransactions
+     */
+    public List<Transaction> getPendingTransactions() {
+        return pendingTransactions;
+    }
+
+    /**
+     * @param pendingTransactions the pendingTransactions to set
+     */
+    public void setPendingTransactions(List<Transaction> pendingTransactions) {
+        this.pendingTransactions = pendingTransactions;
     }
 
 }

@@ -63,7 +63,6 @@ public class TCPserver extends Thread {
         String ClientIP = rawClientIP.toString().substring(1, rawClientIP.toString().indexOf(':'));
 
         //System.out.println("Connected");
-
         CommandMessaje command = null;
         while (isListening()) {
 
@@ -154,8 +153,6 @@ public class TCPserver extends Thread {
                     //notify the new user that it's been accepted
                     TCPclient.sendNewHostAccept(ClientIP);
 
-                   
-
                     //CHECK IF THE USER IS ON THE USERS LISTS. IF NOT, NOTIFY THE NETWORK OF A NEW USER
                     boolean existsUser = false;
                     Iterator<User> itu = main.TFG.getUsers().iterator();
@@ -187,8 +184,8 @@ public class TCPserver extends Thread {
                             Logger.getLogger(TCPserver.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    
-                     //CHECK IF THE IP IS ON THE HOSTS LISTS. IF NOT, NOTIFY THE NETWORK OF A NEW HOST
+
+                    //CHECK IF THE IP IS ON THE HOSTS LISTS. IF NOT, NOTIFY THE NETWORK OF A NEW HOST
                     boolean existsHost = false;
                     Iterator<String> it = main.TFG.getHosts().iterator();
                     while (it.hasNext()) {
@@ -253,10 +250,18 @@ public class TCPserver extends Thread {
             }
             //THERE IS A NEW CONTENT TO MINE, UPDATE MINING CONTENTS
             if (command.getCommand().equals("ADD CONTENT")) {
-                
-                    System.out.println("There is a new content to mine");
-                
+
+                System.out.println("There is a new content to mine");
+
                 main.TFG.setCurrentMiningContents(command.getTransactionList());
+                return;
+            }
+            //THERE IS A NEW PENDING TRANSACTION
+            if (command.getCommand().equals("PENDING TRANSACTION")) {
+
+                System.out.println("There is a new pending transactiopn");
+
+                main.TFG.setPendingTransactions(command.getTransactionList());
                 return;
             }
             //THERE IS A NEW DIFFICULTY

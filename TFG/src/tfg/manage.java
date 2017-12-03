@@ -92,6 +92,7 @@ public class manage extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
+        jTextField2 = new javax.swing.JTextField();
 
         jLabel3.setText("jLabel3");
 
@@ -191,6 +192,11 @@ public class manage extends javax.swing.JFrame {
         });
 
         jButton9.setText("SEND TO ANOTHER USER");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jButton10.setText("PUBLISH TO THE NETWORK");
         jButton10.addActionListener(new java.awt.event.ActionListener() {
@@ -200,6 +206,11 @@ public class manage extends javax.swing.JFrame {
         });
 
         jButton11.setText("REVIEW PENDING TRANSACTIONS");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel11.setText("SEE INFORMATION OF A TRANSACTION");
@@ -232,7 +243,10 @@ public class manage extends javax.swing.JFrame {
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(jLabel7))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(32, 32, 32))
             .addGroup(layout.createSequentialGroup()
@@ -261,15 +275,17 @@ public class manage extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField4))
+                                .addGap(22, 22, 22)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel5)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jTextField4))))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(27, 27, 27)
+                                .addGap(40, 40, 40)
                                 .addComponent(jButton3)))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1))
@@ -321,7 +337,9 @@ public class manage extends javax.swing.JFrame {
                     .addComponent(jButton7)
                     .addComponent(jButton8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel7)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -431,7 +449,8 @@ public class manage extends javax.swing.JFrame {
             String diff = String.valueOf(main.getTFG().getDiff());
             jTextField3.setText(diff);
             jLabel1.setText("BLOCKCHAIN: \"" + main.getTFG().getName() + "\"");
-            jLabel7.setText("Blockchain Address: \"" + main.getLocalUser().getAddress() + "\"");
+            jTextField2.setText(main.getLocalUser().getAddress());
+            jTextField2.setEditable(false);
             jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
 
             repaint();
@@ -442,7 +461,7 @@ public class manage extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         jTextField4.setText("CURRENT");
-        jTextArea1.setText(main.getTFG().getCurrentMiningContents() + "\n\n-----------------------\nYOU CAN'T EDIT THIS BLOCK\n-----------------------\nTo add a transaction, use the menu.");
+        jTextArea1.setText(main.getTFG().getCurrentMiningContents() + "\n\n-----------------------\nTo add a transaction, use the menu.");
 
         this.repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -545,7 +564,8 @@ public class manage extends javax.swing.JFrame {
                 String diff = String.valueOf(main.getTFG().getDiff());
                 jTextField3.setText(diff);
                 jLabel1.setText("BLOCKCHAIN: \"" + main.getTFG().getName() + "\"");
-                jLabel7.setText("Blockchain Address: \"" + main.getLocalUser().getAddress() + "\"");
+                jTextField2.setText(main.getLocalUser().getAddress());
+                jTextField2.setEditable(false);
                 jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
 
                 repaint();
@@ -583,7 +603,7 @@ public class manage extends javax.swing.JFrame {
             }
 
         }
-        String details="";
+        String details = "";
         User creatorUser = null;
         User secondaryUser = null;
 
@@ -606,7 +626,7 @@ public class manage extends javax.swing.JFrame {
                     decrypt.init(Cipher.DECRYPT_MODE, creatorUser.getPublicKey());
                     String decryptedMessage = new String(decrypt.doFinal(wantedTransaction.getEncryptedContents()), StandardCharsets.UTF_8);
 
-                    details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \n Type: To the network\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
+                    details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \nType: To the network\nDate: " + new Date(wantedTransaction.getDate()) + "\nContents: \n" + decryptedMessage;
                 } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -622,7 +642,7 @@ public class manage extends javax.swing.JFrame {
                             creatorUser = u;
                         }
                     }
-                    
+
                     //find user of the secondary user
                     Iterator<User> it2 = main.TFG.getUsers().iterator();
                     while (it2.hasNext()) {
@@ -631,16 +651,16 @@ public class manage extends javax.swing.JFrame {
                             secondaryUser = u;
                         }
                     }
-                    
+
                     //decrypt the message with both public keys
                     Cipher decrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
                     decrypt.init(Cipher.DECRYPT_MODE, creatorUser.getPublicKey());
                     decrypt.doFinal(wantedTransaction.getEncryptedContents());
-                    
+
                     Cipher decrypt2 = Cipher.getInstance("RSA/ECB/PKCS1Padding");
                     decrypt2.init(Cipher.DECRYPT_MODE, secondaryUser.getPublicKey());
                     String decryptedMessage = new String(decrypt2.doFinal(decrypt.doFinal(wantedTransaction.getEncryptedContents())), StandardCharsets.UTF_8);
-                    
+
                     details = "Autor: " + wantedTransaction.getUserCreator() + " \n Type: To another user \n Secondary User: " + wantedTransaction.getUserReciever() + "\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
                 } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
@@ -655,6 +675,17 @@ public class manage extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_jTextField1KeyReleased
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        JFrame TransactionToUser = new TransactionToUser();
+        TransactionToUser.setVisible(true);
+
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        JFrame TransactionPending = new TransactionPending();
+        TransactionPending.setVisible(true);
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -727,6 +758,7 @@ public class manage extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextPane jTextPane1;

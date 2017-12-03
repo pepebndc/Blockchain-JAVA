@@ -61,7 +61,7 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             }
         });
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -173,8 +173,6 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             encrypt.init(Cipher.ENCRYPT_MODE, privKey);
             byte[] encryptedContents = encrypt.doFinal(contents.getBytes());
 
-            
-            
             //create the random string for the ID
             char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
             StringBuilder sb = new StringBuilder();
@@ -186,24 +184,23 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             String transactionID = sb.toString();
 
             //create the transaction
-            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(),null, encryptedContents, System.currentTimeMillis(),0 );
-            
+            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(), null, encryptedContents, System.currentTimeMillis(), 0);
+
             //send the transaction to the rest of the network
             main.TFG.getCurrentMiningContents().add(t);
-            
+
             Iterator<String> it = main.getTFG().getHosts().iterator();
-        while (it.hasNext()) {
-            String host = it.next();
-            try {
-                if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
-                    TCPclient.sendNewContent(host);
+            while (it.hasNext()) {
+                String host = it.next();
+                try {
+                    if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                        TCPclient.sendNewContent(host);
+                    }
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (UnknownHostException ex) {
-                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-            
-            
+
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
             Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -218,7 +215,7 @@ public class TransactionToNetwork extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       setVisible(false);
+        setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
@@ -251,7 +248,7 @@ public class TransactionToNetwork extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TransactionToNetwork().setVisible(true);                
+                new TransactionToNetwork().setVisible(true);
             }
         });
     }
