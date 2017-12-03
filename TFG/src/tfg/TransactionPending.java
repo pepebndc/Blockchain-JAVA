@@ -74,7 +74,7 @@ public class TransactionPending extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("SEND TRANSACTION TO THE NETWORK");
+        jLabel1.setText("YOUR PENDING TRANSACTIONS");
 
         jButton1.setBackground(new java.awt.Color(153, 255, 153));
         jButton1.setText("VERIFY");
@@ -128,37 +128,36 @@ public class TransactionPending extends javax.swing.JFrame {
                     .addComponent(jSeparator5)
                     .addComponent(jSeparator2)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel4)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jTextField1))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(430, 430, 430)
-                                    .addComponent(jButton1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jButton3))
-                                .addComponent(jLabel2))
-                            .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(430, 430, 430)
+                                .addComponent(jButton1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton3))
+                            .addComponent(jLabel2))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(93, 93, 93))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(41, 41, 41)
-                            .addComponent(jLabel1)
-                            .addContainerGap(61, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jSeparator1)
-                            .addContainerGap()))))
+                    .addComponent(jSeparator1)
+                    .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(73, 73, 73)
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(33, 33, 33)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -181,9 +180,7 @@ public class TransactionPending extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(23, 23, 23)
-                    .addComponent(jLabel1)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGap(58, 58, 58)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(460, Short.MAX_VALUE)))
         );
@@ -229,16 +226,16 @@ public class TransactionPending extends javax.swing.JFrame {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             //remove from pending transactions and notify the network
             Iterator<Transaction> itT = main.TFG.getPendingTransactions().iterator();
-            while (itT.hasNext()){
+            while (itT.hasNext()) {
                 Transaction transactionRemoved = itT.next();
-                if(transactionRemoved.equals(wantedTransaction)){
+                if (transactionRemoved.equals(wantedTransaction)) {
                     itT.remove();
                 }
             }
-            
+
             Iterator<String> itR = main.getTFG().getHosts().iterator();
             while (itR.hasNext()) {
                 String host = itR.next();
@@ -278,12 +275,14 @@ public class TransactionPending extends javax.swing.JFrame {
             listOfTransactions = "You have no pending transactions.";
         }
         jTextArea1.setText(listOfTransactions);
+        jButton1.setEnabled(false);
     }//GEN-LAST:event_formWindowActivated
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         // get info of the transaction
         String transactionID = jTextField1.getText();
-        Transaction wantedTransaction = null;
+        Transaction wantedTransaction = new Transaction("","","",null,0,0);
+        wantedTransaction.setID("no transaction");
 
         //find the transaction on the pending transaction list
         Iterator<Transaction> it = main.TFG.getPendingTransactions().iterator();
@@ -296,9 +295,7 @@ public class TransactionPending extends javax.swing.JFrame {
         }
 
         //check if we have a matched transaction
-        boolean transactionMatches = !wantedTransaction.equals(null);
-
-        if (transactionMatches) {
+        if (!wantedTransaction.getID().equals("no transaction")) {
             jButton1.setEnabled(true);
             try {
                 String details = "";
@@ -317,7 +314,7 @@ public class TransactionPending extends javax.swing.JFrame {
                 decrypt.init(Cipher.DECRYPT_MODE, creatorUser.getPublicKey());
                 String decryptedMessage = new String(decrypt.doFinal(wantedTransaction.getEncryptedContents()), StandardCharsets.UTF_8);
 
-                details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \n Type: To the network\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
+                details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \n Type: To another user\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
                 jTextArea3.setText(details);
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
                 Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
@@ -360,6 +357,7 @@ public class TransactionPending extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new TransactionPending().setVisible(true);
+                
             }
         });
     }
