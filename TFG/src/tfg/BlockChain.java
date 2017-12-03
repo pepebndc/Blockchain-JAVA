@@ -5,12 +5,14 @@
  */
 package tfg;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import static tfg.Transaction.transactionListToString;
 
 /**
  *
@@ -22,7 +24,7 @@ public class BlockChain implements Serializable {
     private String name;
     private int diff;
     private List<Block> chain;
-    private String currentMiningContents;
+    private List<Transaction> currentMiningContents;
     private List<String> hosts;
     private List<User> users;
     
@@ -30,13 +32,13 @@ public class BlockChain implements Serializable {
         this.name = name;
         this.diff = 5; //avoid an extreme amount of blocks mined
         this.chain = new ArrayList<>();
-        this.currentMiningContents = "";
+        this.currentMiningContents = new ArrayList<>();
         this.hosts = new ArrayList<>();
         this.users = new ArrayList<>();
 
     }
 
-    public boolean validateChain() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    public boolean validateChain() throws NoSuchAlgorithmException, UnsupportedEncodingException, IOException {
         String[] hashes = new String[this.getChain().size()];
         int length = this.getChain().size();
 
@@ -50,7 +52,7 @@ public class BlockChain implements Serializable {
             int index = b.getIndex();
             String hashPreviousBlock = b.getLastHash();
             long time = b.getTime();
-            String data = b.getData();
+            String data = transactionListToString (b.getData());
             int nonce = b.getNonce();
 
             hashes[index] = hash;
@@ -122,14 +124,14 @@ public class BlockChain implements Serializable {
     /**
      * @return the currentMiningContents
      */
-    public String getCurrentMiningContents() {
+    public List<Transaction> getCurrentMiningContents() {
         return currentMiningContents;
     }
 
     /**
      * @param currentMiningContents the currentMiningContents to set
      */
-    public void setCurrentMiningContents(String currentMiningContents) {
+    public void setCurrentMiningContents(List<Transaction> currentMiningContents) {
         this.currentMiningContents = currentMiningContents;
     }
 

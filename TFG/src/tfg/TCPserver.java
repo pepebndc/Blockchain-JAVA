@@ -253,10 +253,10 @@ public class TCPserver extends Thread {
             }
             //THERE IS A NEW CONTENT TO MINE, UPDATE MINING CONTENTS
             if (command.getCommand().equals("ADD CONTENT")) {
-                if (!command.getContents().equals("")) {
-                    System.out.println("There is a new content to mine: " + command.getContents());
-                }
-                main.TFG.setCurrentMiningContents(command.getContents());
+                
+                    System.out.println("There is a new content to mine");
+                
+                main.TFG.setCurrentMiningContents(command.getTransactionList());
                 return;
             }
             //THERE IS A NEW DIFFICULTY
@@ -270,7 +270,7 @@ public class TCPserver extends Thread {
                 System.out.println("There is a new block in the network");
                 main.TFG.getChain().add(command.getBlock());
                 //erase current mining contents
-                main.TFG.setCurrentMiningContents("");
+                main.TFG.setCurrentMiningContents(null);
 
                 return;
             }

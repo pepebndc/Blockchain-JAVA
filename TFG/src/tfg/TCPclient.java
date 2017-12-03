@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.security.PublicKey;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,8 +41,10 @@ public class TCPclient {
             PublicKey k = pubKey;
             String n = null;
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -75,8 +78,10 @@ public class TCPclient {
             PublicKey k = null;
             String n = null;
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -110,8 +115,10 @@ public class TCPclient {
             PublicKey k = null;
             String n = null;
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -145,8 +152,10 @@ public class TCPclient {
             PublicKey k = newUser.getPublicKey();
             String n = newUser.getName();
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -176,19 +185,21 @@ public class TCPclient {
             String a = null;
             BlockChain bc = null;
             Block b = null;
-            String c = main.TFG.getCurrentMiningContents();
+            String c = null;
             PublicKey k = null;
             String n = null;
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = main.TFG.getCurrentMiningContents();
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
             so.close();
-            if (!c.equals("")) {
-                System.out.println("new contents messaje sent to " + endPoint + " - " + c);
-            }
+
+            System.out.println("new contents messaje sent to " + endPoint);
+
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -217,8 +228,10 @@ public class TCPclient {
             PublicKey k = null;
             String n = null;
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -252,8 +265,10 @@ public class TCPclient {
             PublicKey k = null;
             String n = null;
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -287,8 +302,10 @@ public class TCPclient {
             PublicKey k = null;
             String n = null;
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -322,8 +339,10 @@ public class TCPclient {
             PublicKey k = null;
             String n = null;
             byte[] e = challenge;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -357,8 +376,10 @@ public class TCPclient {
             PublicKey k = userPubKey;
             String n = userName;
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -392,8 +413,10 @@ public class TCPclient {
             PublicKey k = null;
             String n = null;
             byte[] e = null;
+            Transaction t = null;
+            List<Transaction> tl = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
             oo.writeObject(command);
             oo.flush();
             oo.close();

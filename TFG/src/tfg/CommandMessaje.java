@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.security.PublicKey;
+import java.util.List;
 
 /**
  *
@@ -26,9 +27,11 @@ public class CommandMessaje implements Serializable {
     private PublicKey pubKey;
     private String name;
     private byte [] encoded;
+    private Transaction transaction;
+    private List <Transaction> transactionList;
     
 
-    CommandMessaje(String command, String address, BlockChain BC, Block B, String contents, PublicKey pubKey, String name, byte[] encoded) {
+    CommandMessaje(String command, String address, BlockChain BC, Block B, String contents, PublicKey pubKey, String name, byte[] encoded, Transaction transaction,List <Transaction> transactionList ) {
         this.command = command;
         this.address = address;
         this.blockchain = BC;
@@ -37,6 +40,8 @@ public class CommandMessaje implements Serializable {
         this.pubKey = pubKey;
         this.name=name;
         this.encoded=encoded;
+        this.transaction=transaction;
+        this.transactionList=transactionList;
     }
 
     /**
@@ -148,7 +153,37 @@ public class CommandMessaje implements Serializable {
      * @param encoded the encoded to set
      */
     public void setEncoded(byte[] encoded) {
-        this.encoded = encoded;
+        this.setEncoded(encoded);
+    }
+
+
+
+    /**
+     * @return the transaction
+     */
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    /**
+     * @param transaction the transaction to set
+     */
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+
+    /**
+     * @return the transactionList
+     */
+    public List <Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    /**
+     * @param transactionList the transactionList to set
+     */
+    public void setTransactionList(List <Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
 
 

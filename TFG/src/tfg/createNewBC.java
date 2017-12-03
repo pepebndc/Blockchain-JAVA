@@ -8,6 +8,7 @@ package tfg;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -181,9 +182,10 @@ public class createNewBC extends javax.swing.JFrame {
             main.getTFG().setDiff(5);
 
             //Manually creating 2 genesis blocks
-            Block genesis1 = new Block(0, System.currentTimeMillis(), "genesis1", "0", "0", "0");
+            Block genesis1 = new Block(0, System.currentTimeMillis(), new ArrayList<>(), "0", "0", "0");
             main.getTFG().getChain().add(genesis1);
-            Block genesis2 = new Block(1, System.currentTimeMillis(), "genesis2", "0", "0", "0");
+            
+            Block genesis2 = new Block(1, System.currentTimeMillis(), new ArrayList<>(), "0", "0", "0");
             main.getTFG().getChain().add(genesis2);
 
             //Manually adding my IP to the host list
@@ -193,16 +195,14 @@ public class createNewBC extends javax.swing.JFrame {
             //Create the User data
             LocalUser user = LocalUser.create(USERname);
             main.setLocalUser(user);
-           
+
             //Add user to the network list of users
-            User networkUser = new User (USERname, user.getAddress(), user.getPublicKey());
+            User networkUser = new User(USERname, user.getAddress(), user.getPublicKey());
             main.TFG.getUsers().add(networkUser);
 
             //open manage windows
             JFrame manage = new manage();
             manage.setVisible(true);
-            
-
 
             //start the server Thread
             server = new Thread(new serverManager());

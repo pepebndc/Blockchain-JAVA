@@ -11,7 +11,9 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +25,7 @@ public class mine implements Runnable {
 
     private boolean mining = true;
     private BlockChain chain;
-    private String miningData;
+    private List<Transaction> miningData;
 
     public mine(BlockChain chain) {
         this.chain = chain;
@@ -35,7 +37,7 @@ public class mine implements Runnable {
 
         while (mining) {
 
-            main.getTFG().setCurrentMiningContents("");
+            main.getTFG().setCurrentMiningContents(new ArrayList<>());
 
             String[] mined = {"", "", ""};
 
@@ -90,7 +92,7 @@ public class mine implements Runnable {
 
                 //EVERY MINED BLOCK:add to our blockchain and empty mining contents
                 main.getTFG().getChain().add(B);
-                main.getTFG().setCurrentMiningContents("");
+                main.getTFG().setCurrentMiningContents(new ArrayList<>());
 
                 //notify the network about the new block and the new (empty) mining contents
                 Iterator<String> it = main.getTFG().getHosts().iterator();
@@ -131,14 +133,14 @@ public class mine implements Runnable {
     /**
      * @return the miningData
      */
-    public String getMiningData() {
+    public List<Transaction> getMiningData() {
         return miningData;
     }
 
     /**
      * @param miningData the miningData to set
      */
-    public void setMiningData(String miningData) {
+    public void setMiningData(List<Transaction> miningData) {
         this.miningData = miningData;
     }
 

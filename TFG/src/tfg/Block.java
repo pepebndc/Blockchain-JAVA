@@ -13,6 +13,7 @@ import java.math.BigInteger;
 import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  *
@@ -23,12 +24,12 @@ public class Block implements Serializable {
     private static final long serialVersionUID = 5950169519310163575L;
     private int index;
     private long time;
-    private String data;
+    private List<Transaction> data;
     private String lastHash;
     private String hash;
     private String nonce;
 
-    Block(int index, long time, String data, String lastHash, String hash, String nonce) throws NoSuchAlgorithmException {
+    Block(int index, long time, List<Transaction> data, String lastHash, String hash, String nonce) throws NoSuchAlgorithmException {
 
         this.index = index;
         this.time = time;
@@ -51,7 +52,8 @@ public class Block implements Serializable {
         String code = sb.toString();
         String hash = "hi";
         int nonceInt = (int) (Math.random() * 1000000000);
-        String fileData = "";
+        List<Transaction> listOfTransactions ;
+        String fileData ="";
         int index = 0;
         long time=0;
         String lastHash;
@@ -61,7 +63,8 @@ public class Block implements Serializable {
             index = main.getTFG().getChain().size();
             time = System.currentTimeMillis();
             lastHash = main.getTFG().getChain().get(index - 1).getHash();
-            fileData = main.getTFG().getCurrentMiningContents();
+            fileData = Transaction.transactionListToString( main.getTFG().getCurrentMiningContents());
+            
 
             int t = 0;
             while (!hash.startsWith(code) && t != 10) {
@@ -73,7 +76,7 @@ public class Block implements Serializable {
 
         }
 
-        System.out.println("Block " + index + " has been mined at "+main.currentTime()+" by address: "+main.getLocalUser().getAddress()+ " @ IP: " +InetAddress.getLocalHost().getHostAddress()+" --> " + hash + " //CONTENTS: " + fileData);
+        System.out.println("Block " + index + " has been mined at "+main.currentTime()+" by address: "+main.getLocalUser().getAddress()+ " @ IP: " +InetAddress.getLocalHost().getHostAddress()+" --> " + hash);
 
         String nonceString = String.valueOf(nonceInt);
 
@@ -150,14 +153,14 @@ public class Block implements Serializable {
     /**
      * @return the data
      */
-    public String getData() {
+    public List<Transaction> getData() {
         return data;
     }
 
     /**
      * @param data the data to set
      */
-    public void setData(String data) {
+    public void setData(List<Transaction> data) {
         this.data = data;
     }
 
