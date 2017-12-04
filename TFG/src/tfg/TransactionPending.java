@@ -200,7 +200,7 @@ public class TransactionPending extends javax.swing.JFrame {
             while (it.hasNext()) {
                 t = it.next();
 
-                if (t.getID().equals(transactionID) && t.getUserReciever().equals(main.getLocalUser().getAddress())) {
+                if (t.getID().equals(transactionID) && t.getUserReceiver().equals(main.getLocalUser().getAddress())) {
                     wantedTransaction = t;
                 }
             }
@@ -262,17 +262,35 @@ public class TransactionPending extends javax.swing.JFrame {
 
         String myAddress = main.getLocalUser().getAddress();
 
-        String listOfTransactions = "";
-
+        //sent to another user, pending to verify
+        String listOfTransactions = "Transactions sended that are waiting to be verified by the other user:";
+        boolean transactionSent = false;
         Iterator<Transaction> it = main.getTFG().getPendingTransactions().iterator();
         while (it.hasNext()) {
             Transaction t = it.next();
-            if (t.getUserReciever().equals(myAddress)) {
+            if (t.getUserCreator().equals(myAddress)) {
                 listOfTransactions = listOfTransactions + "\n--------\n" + t.getID();
+                transactionSent = true;
             }
         }
-        if (listOfTransactions.equals("")) {
-            listOfTransactions = "You have no pending transactions.";
+        
+        if(transactionSent == false){
+            listOfTransactions = listOfTransactions + "\n---No sent transactions pending to verify---";
+        }
+
+        //sent to my user, pending to verify
+        boolean transactionReceived = false;
+        listOfTransactions = listOfTransactions + "\n +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \nTransactions received waiting for verification:";
+        Iterator<Transaction> it2 = main.getTFG().getPendingTransactions().iterator();
+        while (it2.hasNext()) {
+            Transaction t = it2.next();
+            if (t.getUserReceiver().equals(myAddress)) {
+                listOfTransactions = listOfTransactions + "\n--------\n" + t.getID();
+                transactionReceived=true;
+            }
+        }
+                if(transactionReceived == false){
+            listOfTransactions = listOfTransactions + "\n---No received transactions pending to verify---";
         }
         jTextArea1.setText(listOfTransactions);
         jTextArea1.setEditable(false);
@@ -283,7 +301,7 @@ public class TransactionPending extends javax.swing.JFrame {
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         // get info of the transaction
         String transactionID = jTextField1.getText();
-        Transaction wantedTransaction = new Transaction("","","",null,0,0);
+        Transaction wantedTransaction = new Transaction("", "", "", null, 0, 0);
         wantedTransaction.setID("no transaction");
 
         //find the transaction on the pending transaction list
@@ -291,14 +309,18 @@ public class TransactionPending extends javax.swing.JFrame {
         while (it.hasNext()) {
             Transaction t = it.next();
 
-            if (t.getID().equals(transactionID) && t.getUserReciever().equals(main.getLocalUser().getAddress())) {
+            if (t.getID().equals(transactionID) && (t.getUserReceiver().equals(main.getLocalUser().getAddress()) || t.getUserCreator().equals(main.getLocalUser().getAddress()))) {
                 wantedTransaction = t;
             }
         }
 
         //check if we have a matched transaction
         if (!wantedTransaction.getID().equals("no transaction")) {
-            jButton1.setEnabled(true);
+            if(wantedTransaction.getUserReceiver().equals(main.getLocalUser().getAddress())){
+                jButton1.setEnabled(true);
+            }
+            
+            
             try {
                 String details = "";
                 User creatorUser = null;
@@ -316,7 +338,7 @@ public class TransactionPending extends javax.swing.JFrame {
                 decrypt.init(Cipher.DECRYPT_MODE, creatorUser.getPublicKey());
                 String decryptedMessage = new String(decrypt.doFinal(wantedTransaction.getEncryptedContents()), StandardCharsets.UTF_8);
 
-                details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \n Type: To another user\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
+                details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \n Type: To another user\nReceiver User: "+ wantedTransaction.getUserReceiver()+"\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
                 jTextArea3.setText(details);
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
                 Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
@@ -324,7 +346,7 @@ public class TransactionPending extends javax.swing.JFrame {
 
         } else {
             jButton1.setEnabled(false);
-            jTextArea3.setText("That transaction does not exist or you are not the receiver of it.");
+            jTextArea3.setText("That transaction does not include you (or does not exist) , therefore you can't see it yet.");
         }
     }//GEN-LAST:event_jTextField1KeyReleased
 
@@ -359,7 +381,7 @@ public class TransactionPending extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new TransactionPending().setVisible(true);
-                
+
             }
         });
     }

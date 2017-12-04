@@ -665,7 +665,7 @@ public class manage extends javax.swing.JFrame {
                     Iterator<User> it2 = main.TFG.getUsers().iterator();
                     while (it2.hasNext()) {
                         User u = it2.next();
-                        if (u.getAddress().equals(wantedTransaction.getUserReciever())) {
+                        if (u.getAddress().equals(wantedTransaction.getUserReceiver())) {
                             secondaryUser = u;
                         }
                     }
@@ -679,7 +679,7 @@ public class manage extends javax.swing.JFrame {
                     decrypt2.init(Cipher.DECRYPT_MODE, secondaryUser.getPublicKey());
                     String decryptedMessage = new String(decrypt2.doFinal(decrypt.doFinal(wantedTransaction.getEncryptedContents())), StandardCharsets.UTF_8);
 
-                    details = "Autor: " + wantedTransaction.getUserCreator() + " \n Type: To another user \n Secondary User: " + wantedTransaction.getUserReciever() + "\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
+                    details = "Autor: " + wantedTransaction.getUserCreator() + " \n Type: To another user \n Secondary User: " + wantedTransaction.getUserReceiver() + "\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
                 } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }

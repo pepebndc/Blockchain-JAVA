@@ -22,16 +22,16 @@ public class Transaction implements Serializable {
     private static final long serialVersionUID = 5950169519310163575L;
     private String ID;
     private String UserCreator;
-    private String UserReciever;
+    private String UserReceiver;
     private byte[] EncryptedContents;
     private long date;
     private int type;
 
-    Transaction(String id, String creator, String reciever, byte[] contents, long date, int type) {
+    Transaction(String id, String creator, String Receiver, byte[] contents, long date, int type) {
 
         this.ID = id;
         this.UserCreator = creator;
-        this.UserReciever = reciever;
+        this.UserReceiver = Receiver;
         this.EncryptedContents = contents;
         this.date = date;
         this.type = type;
@@ -91,17 +91,17 @@ public class Transaction implements Serializable {
     }
 
     /**
-     * @return the UserReciever
+     * @return the UserReceiver
      */
-    public String getUserReciever() {
-        return UserReciever;
+    public String getUserReceiver() {
+        return UserReceiver;
     }
 
     /**
-     * @param UserReciever the UserReciever to set
+     * @param UserReceiver the UserReceiver to set
      */
-    public void setUserReciever(String UserReciever) {
-        this.UserReciever = UserReciever;
+    public void setUserReceiver(String UserReceiver) {
+        this.UserReceiver = UserReceiver;
     }
 
     /**
