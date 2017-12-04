@@ -24,15 +24,17 @@ public class Transaction implements Serializable {
     private String UserCreator;
     private String UserReceiver;
     private byte[] EncryptedContents;
+    private byte[] EncryptedContentsAgreed;
     private long date;
     private int type;
 
-    Transaction(String id, String creator, String Receiver, byte[] contents, long date, int type) {
+    Transaction(String id, String creator, String Receiver, byte[] contents,byte[] contentsAgreed, long date, int type) {
 
         this.ID = id;
         this.UserCreator = creator;
         this.UserReceiver = Receiver;
         this.EncryptedContents = contents;
+        this.EncryptedContentsAgreed = contentsAgreed;
         this.date = date;
         this.type = type;
     }
@@ -144,5 +146,19 @@ public class Transaction implements Serializable {
      */
     public void setType(int type) {
         this.type = type;
+    }
+
+    /**
+     * @return the EncryptedContentsAgreed
+     */
+    public byte[] getEncryptedContentsAgreed() {
+        return EncryptedContentsAgreed;
+    }
+
+    /**
+     * @param EncryptedContentsAgreed the EncryptedContentsAgreed to set
+     */
+    public void setEncryptedContentsAgreed(byte[] EncryptedContentsAgreed) {
+        this.EncryptedContentsAgreed = EncryptedContentsAgreed;
     }
 }

@@ -184,7 +184,7 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             String transactionID = sb.toString();
 
             //create the transaction
-            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(), null, encryptedContents, System.currentTimeMillis(), 0);
+            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(), null, encryptedContents,null, System.currentTimeMillis(), 0);
 
             //send the transaction to the rest of the network
             main.TFG.getCurrentMiningContents().add(t);

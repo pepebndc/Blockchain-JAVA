@@ -151,7 +151,7 @@ public class TCPserver extends Thread {
                 //compare the solution with the sent challenge
                 if (command.getContents().equals(main.challengeStored)) {
                     //notify the new user that it's been accepted
-                    TCPclient.sendNewHostAccept(ClientIP);
+                    
 
                     //CHECK IF THE USER IS ON THE USERS LISTS. IF NOT, NOTIFY THE NETWORK OF A NEW USER
                     boolean existsUser = false;
@@ -211,6 +211,8 @@ public class TCPserver extends Thread {
                         //add to my list
                         main.TFG.getHosts().add(ClientIP);
                     }
+                    
+                    TCPclient.sendNewHostAccept(ClientIP);
 
                 } else {
                     TCPclient.sendFailedChallenge(ClientIP);

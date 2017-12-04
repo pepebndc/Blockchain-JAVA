@@ -42,6 +42,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class manage extends javax.swing.JFrame {
 
     Thread mining;
+
     /**
      * Creates new form manage
      */
@@ -467,10 +468,9 @@ public class manage extends javax.swing.JFrame {
             jTextField2.setText(main.getLocalUser().getAddress());
             jTextField2.setEditable(false);
             jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
-            
+
             //Color background = new Color (187,222,251);
             //getContentPane().setBackground(background);  //Whatever color
-
             repaint();
         } catch (UnknownHostException ex) {
             Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
@@ -670,17 +670,25 @@ public class manage extends javax.swing.JFrame {
                         }
                     }
 
-                    //decrypt the message with both public keys
+                    //decrypt content with creator's public key
                     Cipher decrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
                     decrypt.init(Cipher.DECRYPT_MODE, creatorUser.getPublicKey());
-                    decrypt.doFinal(wantedTransaction.getEncryptedContents());
+                    String decryptedMessage = new String(decrypt.doFinal(wantedTransaction.getEncryptedContents()), StandardCharsets.UTF_8);
 
+                    //decrypt content with receivers's public key
                     Cipher decrypt2 = Cipher.getInstance("RSA/ECB/PKCS1Padding");
                     decrypt2.init(Cipher.DECRYPT_MODE, secondaryUser.getPublicKey());
-                    String decryptedMessage = new String(decrypt2.doFinal(decrypt.doFinal(wantedTransaction.getEncryptedContents())), StandardCharsets.UTF_8);
+                    String decryptedMessageAgreed = new String(decrypt2.doFinal(wantedTransaction.getEncryptedContentsAgreed()), StandardCharsets.UTF_8);
 
-                    details = "Autor: " + wantedTransaction.getUserCreator() + " \n Type: To another user \n Secondary User: " + wantedTransaction.getUserReceiver() + "\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
-                } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
+                    if(decryptedMessageAgreed.equals(decryptedMessage)){
+                        details = "Autor: " + wantedTransaction.getUserCreator() + " \n Type: To another user \n Secondary User: " + wantedTransaction.getUserReceiver() + "\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
+                
+                    }else{
+                        
+                        details= "This transaction is corrupted, the contents of the autor and the receiver do not match.";
+                    }
+
+                    } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

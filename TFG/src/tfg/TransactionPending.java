@@ -189,68 +189,97 @@ public class TransactionPending extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // get info of the transaction
-            String transactionID = jTextField1.getText();
-            Transaction wantedTransaction = null;
-            Transaction t = null;
+        // get info of the transaction
+        String transactionID = jTextField1.getText();
+        Transaction wantedTransaction = null;
+        Transaction t = null;
+        //find the transaction on the pending transaction list
+        Iterator<Transaction> it = main.TFG.getPendingTransactions().iterator();
+        while (it.hasNext()) {
+            t = it.next();
 
-            //find the transaction on the pending transaction list
-            Iterator<Transaction> it = main.TFG.getPendingTransactions().iterator();
-            while (it.hasNext()) {
-                t = it.next();
-
-                if (t.getID().equals(transactionID) && t.getUserReceiver().equals(main.getLocalUser().getAddress())) {
-                    wantedTransaction = t;
-                }
+            if (t.getID().equals(transactionID) && t.getUserReceiver().equals(main.getLocalUser().getAddress())) {
+                wantedTransaction = t;
             }
-
-            //add to the network after encrypted with private key            
-            PrivateKey privKey = main.getLocalUser().getPrivateKey();
-            Cipher encrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            encrypt.init(Cipher.ENCRYPT_MODE, privKey);
-            byte[] encryptedContents = encrypt.doFinal(t.getEncryptedContents());
-
-            t.setEncryptedContents(encryptedContents);
-
-            main.TFG.getCurrentMiningContents().add(t);
-
-            Iterator<String> itH = main.getTFG().getHosts().iterator();
-            while (itH.hasNext()) {
-                String host = itH.next();
-                try {
-                    if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
-                        TCPclient.sendNewContent(host);
-                    }
-                } catch (UnknownHostException ex) {
-                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            //remove from pending transactions and notify the network
-            Iterator<Transaction> itT = main.TFG.getPendingTransactions().iterator();
-            while (itT.hasNext()) {
-                Transaction transactionRemoved = itT.next();
-                if (transactionRemoved.equals(wantedTransaction)) {
-                    itT.remove();
-                }
-            }
-
-            Iterator<String> itR = main.getTFG().getHosts().iterator();
-            while (itR.hasNext()) {
-                String host = itR.next();
-                try {
-                    if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
-                        TCPclient.sendNewPendingTransaction(host);
-                    }
-                } catch (UnknownHostException ex) {
-                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
-            Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if(wantedTransaction!=null){
+            System.out.println("there is a transaction: "+ wantedTransaction.getID());
+            System.out.println("User creator: "+ wantedTransaction.getUserCreator());
+        }else{
+            System.out.println("there is no transaction available");
+        }
+        //get the contents in plain text
+        //find user of the creator
+        User creatorUser = null;
+        Iterator<User> itU = main.TFG.getUsers().iterator();
+        while (itU.hasNext()) {
+            
+                User u = itU.next();
+                System.out.println("List of users, address:: "+ u.getAddress());
+                System.out.println("List of users, desired address: "+ wantedTransaction.getUserCreator());
+                if (u.getAddress().equals(wantedTransaction.getUserCreator())) {
+                    creatorUser = u;
+                    System.out.println("we have the user: "+ u.getPublicKey());
+                }
+            }
+        try {
+                //decrypt content with creator's public key
+                Cipher decrypt;
+                
+                decrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+                decrypt.init(Cipher.DECRYPT_MODE, creatorUser.getPublicKey());
+                String decryptedMessage = new String(decrypt.doFinal(wantedTransaction.getEncryptedContents()), StandardCharsets.UTF_8);
+                
+                //add to the network after encrypted with private key
+                PrivateKey privKey = main.getLocalUser().getPrivateKey();
+                Cipher encrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+                encrypt.init(Cipher.ENCRYPT_MODE, privKey);
+                byte[] encryptedContents = encrypt.doFinal(decryptedMessage.getBytes());
+                
+                t.setEncryptedContents(encryptedContents);
+                
+                main.TFG.getCurrentMiningContents().add(t);
+                
+                Iterator<String> itH = main.getTFG().getHosts().iterator();
+                while (itH.hasNext()) {
+                    String host = itH.next();
+                    try {
+                        if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                            TCPclient.sendNewContent(host);
+                        }
+                    } catch (UnknownHostException ex) {
+                        Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
+                //remove from pending transactions and notify the network
+                Iterator<Transaction> itT = main.TFG.getPendingTransactions().iterator();
+                while (itT.hasNext()) {
+                    Transaction transactionRemoved = itT.next();
+                    if (transactionRemoved.equals(wantedTransaction)) {
+                        itT.remove();
+                    }
+                }
+                
+                Iterator<String> itR = main.getTFG().getHosts().iterator();
+                while (itR.hasNext()) {
+                    String host = itR.next();
+                    try {
+                        if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                            TCPclient.sendNewPendingTransaction(host);
+                        }
+                    } catch (UnknownHostException ex) {
+                        Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    repaint();
+                }
+            } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+                Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    
+        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -273,8 +302,8 @@ public class TransactionPending extends javax.swing.JFrame {
                 transactionSent = true;
             }
         }
-        
-        if(transactionSent == false){
+
+        if (transactionSent == false) {
             listOfTransactions = listOfTransactions + "\n---No sent transactions pending to verify---";
         }
 
@@ -286,10 +315,10 @@ public class TransactionPending extends javax.swing.JFrame {
             Transaction t = it2.next();
             if (t.getUserReceiver().equals(myAddress)) {
                 listOfTransactions = listOfTransactions + "\n--------\n" + t.getID();
-                transactionReceived=true;
+                transactionReceived = true;
             }
         }
-                if(transactionReceived == false){
+        if (transactionReceived == false) {
             listOfTransactions = listOfTransactions + "\n---No received transactions pending to verify---";
         }
         jTextArea1.setText(listOfTransactions);
@@ -301,7 +330,7 @@ public class TransactionPending extends javax.swing.JFrame {
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         // get info of the transaction
         String transactionID = jTextField1.getText();
-        Transaction wantedTransaction = new Transaction("", "", "", null, 0, 0);
+        Transaction wantedTransaction = new Transaction("", "", "", null, null, 0, 0);
         wantedTransaction.setID("no transaction");
 
         //find the transaction on the pending transaction list
@@ -316,11 +345,11 @@ public class TransactionPending extends javax.swing.JFrame {
 
         //check if we have a matched transaction
         if (!wantedTransaction.getID().equals("no transaction")) {
-            if(wantedTransaction.getUserReceiver().equals(main.getLocalUser().getAddress())){
+            if (wantedTransaction.getUserReceiver().equals(main.getLocalUser().getAddress())) {
                 jButton1.setEnabled(true);
             }
-            
-            
+            System.out.println("Transaction: "+ wantedTransaction.getID());
+            System.out.println("Creator user: "+ wantedTransaction.getUserCreator());
             try {
                 String details = "";
                 User creatorUser = null;
@@ -328,8 +357,10 @@ public class TransactionPending extends javax.swing.JFrame {
                 Iterator<User> itU = main.TFG.getUsers().iterator();
                 while (itU.hasNext()) {
                     User u = itU.next();
+                    System.out.println("Address of the user on the list: " +u.getAddress());
                     if (u.getAddress().equals(wantedTransaction.getUserCreator())) {
                         creatorUser = u;
+                       System.out.println("Address of matched user: " +u.getAddress());
                     }
                 }
 
@@ -338,7 +369,7 @@ public class TransactionPending extends javax.swing.JFrame {
                 decrypt.init(Cipher.DECRYPT_MODE, creatorUser.getPublicKey());
                 String decryptedMessage = new String(decrypt.doFinal(wantedTransaction.getEncryptedContents()), StandardCharsets.UTF_8);
 
-                details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \n Type: To another user\nReceiver User: "+ wantedTransaction.getUserReceiver()+"\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
+                details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \n Type: To another user\nReceiver User: " + wantedTransaction.getUserReceiver() + "\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
                 jTextArea3.setText(details);
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
                 Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
