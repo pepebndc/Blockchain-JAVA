@@ -275,6 +275,8 @@ public class TransactionPending extends javax.swing.JFrame {
             listOfTransactions = "You have no pending transactions.";
         }
         jTextArea1.setText(listOfTransactions);
+        jTextArea1.setEditable(false);
+        jTextArea3.setEditable(false);
         jButton1.setEnabled(false);
     }//GEN-LAST:event_formWindowActivated
 
