@@ -330,7 +330,7 @@ public class TransactionPending extends javax.swing.JFrame {
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         // get info of the transaction
         String transactionID = jTextField1.getText();
-        Transaction wantedTransaction = new Transaction("", "", "", null, null, 0, 0);
+        Transaction wantedTransaction = new Transaction("", "", "", null, null,null,null, 0, 0);
         wantedTransaction.setID("no transaction");
 
         //find the transaction on the pending transaction list

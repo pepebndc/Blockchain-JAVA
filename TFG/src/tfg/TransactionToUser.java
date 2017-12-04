@@ -173,7 +173,7 @@ public class TransactionToUser extends javax.swing.JFrame {
             String transactionID = sb.toString();
 
             //create the transaction
-            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(),receivingAddress, encryptedContents,null, System.currentTimeMillis(),1 );
+            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(),receivingAddress, encryptedContents,null,null,null, System.currentTimeMillis(),1 );
 
             //send the transaction to the pending transaction list
             main.TFG.getPendingTransactions().add(t);

@@ -18,7 +18,9 @@ import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.swing.JFrame;
 
 /**
@@ -167,13 +169,17 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             String contents = jTextArea1.getText();
             jTextArea1.setText("");
 
-            //Encrypt with your private key
-            PrivateKey privKey = main.getLocalUser().getPrivateKey();
-            Cipher encrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            encrypt.init(Cipher.ENCRYPT_MODE, privKey);
-            byte[] encryptedContents = encrypt.doFinal(contents.getBytes());
-
-            //create the random string for the ID
+            
+            //encrypt content with AES
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen.init(128);
+            SecretKey AESkey = keyGen.generateKey();
+            byte[] contentsEncryptedAES = Transaction.encryptAES(contents.getBytes(), AESkey);
+            
+            //encrypt AES key with RSA private key of the user
+            byte[] AESencrypted = Transaction.encryptSHA(contentsEncryptedAES, null, main.getLocalUser().getPrivateKey());
+            
+            //create the random string for the ID of the transaction
             char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
             StringBuilder sb = new StringBuilder();
             Random random = new Random();
@@ -184,7 +190,7 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             String transactionID = sb.toString();
 
             //create the transaction
-            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(), null, encryptedContents,null, System.currentTimeMillis(), 0);
+            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(), null, contentsEncryptedAES,null,AESencrypted, null,  System.currentTimeMillis(), 0);
 
             //send the transaction to the rest of the network
             main.TFG.getCurrentMiningContents().add(t);

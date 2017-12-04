@@ -29,6 +29,8 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -627,6 +629,7 @@ public class manage extends javax.swing.JFrame {
 
         if (wantedTransaction != null) {
 
+            //TRANSACTION DIRECTLY TO THE NETWORK
             if (wantedTransaction.getType() == 0) {
 
                 try {
@@ -639,16 +642,20 @@ public class manage extends javax.swing.JFrame {
                         }
                     }
 
-                    //decrypt content with creator's public key
-                    Cipher decrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-                    decrypt.init(Cipher.DECRYPT_MODE, creatorUser.getPublicKey());
-                    String decryptedMessage = new String(decrypt.doFinal(wantedTransaction.getEncryptedContents()), StandardCharsets.UTF_8);
+                    //decrypt AES key with creator's public key
+                    byte[] AESkeyByte = Transaction.decryptSHA(wantedTransaction.getAESkeySent(), creatorUser.getPublicKey(), null);
+                    SecretKey AESkey = new SecretKeySpec(AESkeyByte, 0, AESkeyByte.length, "AES");
+
+                    //decrypt contents with AES key from the creator
+                    byte[] contents = Transaction.decryptAES(wantedTransaction.getEncryptedContents(), AESkey);
+                    String decryptedMessage = new String(contents, StandardCharsets.UTF_8);
 
                     details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \nType: To the network\nDate: " + new Date(wantedTransaction.getDate()) + "\nContents: \n" + decryptedMessage;
                 } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
+                //TRANSACTION TO ANOTHER USER
             } else {
 
                 try {
@@ -670,25 +677,32 @@ public class manage extends javax.swing.JFrame {
                         }
                     }
 
-                    //decrypt content with creator's public key
-                    Cipher decrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-                    decrypt.init(Cipher.DECRYPT_MODE, creatorUser.getPublicKey());
-                    String decryptedMessage = new String(decrypt.doFinal(wantedTransaction.getEncryptedContents()), StandardCharsets.UTF_8);
+                    //decrypt AES key with creator's public key
+                    byte[] AESkeyByte = Transaction.decryptSHA(wantedTransaction.getAESkeySent(), creatorUser.getPublicKey(), null);
+                    SecretKey AESkey = new SecretKeySpec(AESkeyByte, 0, AESkeyByte.length, "AES/CTR/NoPadding");
 
-                    //decrypt content with receivers's public key
-                    Cipher decrypt2 = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-                    decrypt2.init(Cipher.DECRYPT_MODE, secondaryUser.getPublicKey());
-                    String decryptedMessageAgreed = new String(decrypt2.doFinal(wantedTransaction.getEncryptedContentsAgreed()), StandardCharsets.UTF_8);
+                    //decrypt contents with AES key from the creator
+                    byte[] contents = Transaction.decryptAES(wantedTransaction.getEncryptedContents(), AESkey);
+                    String decryptedMessage = new String(contents, StandardCharsets.UTF_8);
 
-                    if(decryptedMessageAgreed.equals(decryptedMessage)){
+                    //-------------------------------------
+                    //decrypt AES key with receiver's public key
+                    byte[] AESkeyByte2 = Transaction.decryptSHA(wantedTransaction.getAESkeyAgreed(), secondaryUser.getPublicKey(), null);
+                    SecretKey AESkey2 = new SecretKeySpec(AESkeyByte2, 0, AESkeyByte2.length, "AES/CTR/NoPadding");
+
+                    //decrypt contents with AES key from the receiver
+                    byte[] contents2 = Transaction.decryptAES(wantedTransaction.getEncryptedContentsAgreed(), AESkey2);
+                    String decryptedMessage2 = new String(contents, StandardCharsets.UTF_8);
+
+                    if (decryptedMessage2.equals(decryptedMessage)) {
                         details = "Autor: " + wantedTransaction.getUserCreator() + " \n Type: To another user \n Secondary User: " + wantedTransaction.getUserReceiver() + "\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
-                
-                    }else{
-                        
-                        details= "This transaction is corrupted, the contents of the autor and the receiver do not match.";
+
+                    } else {
+
+                        details = "This transaction is corrupted, the contents of the autor and the receiver do not match.";
                     }
 
-                    } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
+                } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
