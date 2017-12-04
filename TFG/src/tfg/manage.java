@@ -5,6 +5,7 @@
  */
 package tfg;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -103,6 +104,7 @@ public class manage extends javax.swing.JFrame {
         jLabel10.setToolTipText("");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(204, 255, 255));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -465,6 +467,9 @@ public class manage extends javax.swing.JFrame {
             jTextField2.setText(main.getLocalUser().getAddress());
             jTextField2.setEditable(false);
             jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
+            
+            //Color background = new Color (187,222,251);
+            //getContentPane().setBackground(background);  //Whatever color
 
             repaint();
         } catch (UnknownHostException ex) {
