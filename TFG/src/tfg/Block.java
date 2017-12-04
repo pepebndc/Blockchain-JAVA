@@ -59,7 +59,7 @@ public class Block implements Serializable {
         String lastHash;
 
         //Changing the nonce to match difficulty
-        while (!hash.startsWith(code)) {
+        while (!hash.startsWith(code) && main.isMining()) {
             index = main.getTFG().getChain().size();
             time = System.currentTimeMillis();
             lastHash = main.getTFG().getChain().get(index - 1).getHash();
@@ -76,11 +76,17 @@ public class Block implements Serializable {
 
         }
 
+        if(main.isMining()){
         System.out.println("Block " + index + " has been mined at "+main.currentTime()+" by address: "+main.getLocalUser().getAddress()+ " @ IP: " +InetAddress.getLocalHost().getHostAddress()+" --> " + hash);
 
         String nonceString = String.valueOf(nonceInt);
 
         return new String[]{hash, nonceString,String.valueOf(time) };
+        }else{
+            return new String[]{"", "", ""};
+        }
+        
+        
 
     }
 

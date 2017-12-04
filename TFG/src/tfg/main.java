@@ -23,6 +23,7 @@ public class main {
     static BlockChain TFG;
     private static LocalUser localUser;
     static String challengeStored;
+    private static boolean mining;
 
     public static void main() throws NoSuchAlgorithmException, IOException {
 
@@ -63,6 +64,22 @@ public class main {
     public static void setLocalUser(LocalUser aLocalUser) {
         localUser = aLocalUser;
     }
+
+    /**
+     * @return the mining
+     */
+    public static boolean isMining() {
+        return mining;
+    }
+
+    /**
+     * @param aMining the mining to set
+     */
+    public static void setMining(boolean aMining) {
+        mining = aMining;
+    }
+
+
 }
 
  

@@ -187,6 +187,8 @@ public class createNewBC extends javax.swing.JFrame {
             
             Block genesis2 = new Block(1, System.currentTimeMillis(), new ArrayList<>(), "0", "0", "0");
             main.getTFG().getChain().add(genesis2);
+            
+            main.getTFG().setCurrentMiningContents(new ArrayList<>());
 
             //Manually adding my IP to the host list
             System.out.println("My IP: " + InetAddress.getLocalHost().getHostAddress());
