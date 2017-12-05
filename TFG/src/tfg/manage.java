@@ -18,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -643,17 +644,23 @@ public class manage extends javax.swing.JFrame {
                     }
 
                     //decrypt AES key with creator's public key
+                    System.out.println("Started getting AES from creator1");
                     byte[] AESkeyByte = Transaction.decryptSHA(wantedTransaction.getAESkeySent(), creatorUser.getPublicKey(), null);
+                    System.out.println("AES in bytes decrypted");
                     SecretKey AESkey = new SecretKeySpec(AESkeyByte, 0, AESkeyByte.length, "AES");
+                    System.out.println("AES key decrypted: "+ AESkey);
 
                     //decrypt contents with AES key from the creator
                     byte[] contents = Transaction.decryptAES(wantedTransaction.getEncryptedContents(), AESkey);
+                    System.out.println("Decrypted contents in bytes");
                     String decryptedMessage = new String(contents, StandardCharsets.UTF_8);
 
                     details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \nType: To the network\nDate: " + new Date(wantedTransaction.getDate()) + "\nContents: \n" + decryptedMessage;
-                } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+                } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                //TRANSACTION TO ANOTHER USER
+                
 
                 //TRANSACTION TO ANOTHER USER
             } else {
@@ -678,17 +685,19 @@ public class manage extends javax.swing.JFrame {
                     }
 
                     //decrypt AES key with creator's public key
+                    System.out.println("started getting AES from creator2");
                     byte[] AESkeyByte = Transaction.decryptSHA(wantedTransaction.getAESkeySent(), creatorUser.getPublicKey(), null);
-                    SecretKey AESkey = new SecretKeySpec(AESkeyByte, 0, AESkeyByte.length, "AES/CTR/NoPadding");
-
+                    SecretKey AESkey = new SecretKeySpec(AESkeyByte, 0, AESkeyByte.length, "AES");
+                    System.out.println("AES key decrypted: "+ AESkey);
                     //decrypt contents with AES key from the creator
                     byte[] contents = Transaction.decryptAES(wantedTransaction.getEncryptedContents(), AESkey);
                     String decryptedMessage = new String(contents, StandardCharsets.UTF_8);
 
                     //-------------------------------------
                     //decrypt AES key with receiver's public key
+                    System.out.println("started getting AES from receiver");
                     byte[] AESkeyByte2 = Transaction.decryptSHA(wantedTransaction.getAESkeyAgreed(), secondaryUser.getPublicKey(), null);
-                    SecretKey AESkey2 = new SecretKeySpec(AESkeyByte2, 0, AESkeyByte2.length, "AES/CTR/NoPadding");
+                    SecretKey AESkey2 = new SecretKeySpec(AESkeyByte2, 0, AESkeyByte2.length, "AES");
 
                     //decrypt contents with AES key from the receiver
                     byte[] contents2 = Transaction.decryptAES(wantedTransaction.getEncryptedContentsAgreed(), AESkey2);
@@ -703,6 +712,8 @@ public class manage extends javax.swing.JFrame {
                     }
 
                 } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
+                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidAlgorithmParameterException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

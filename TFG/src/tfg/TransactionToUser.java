@@ -7,6 +7,8 @@ package tfg;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -17,7 +19,9 @@ import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 
 /**
  *
@@ -128,15 +132,12 @@ public class TransactionToUser extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton3))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1)
+                        .addComponent(jButton3)))
                 .addGap(8, 8, 8)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -156,11 +157,15 @@ public class TransactionToUser extends javax.swing.JFrame {
             jTextArea1.setText("");
             jTextField1.setText("");
 
-            //Encrypt with your private key
-            PrivateKey privKey = main.getLocalUser().getPrivateKey();
-            Cipher encrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            encrypt.init(Cipher.ENCRYPT_MODE, privKey);
-            byte[] encryptedContents = encrypt.doFinal(contents.getBytes());
+            //encrypt content with AES
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            keyGen.init(128);
+            SecretKey AESkey = keyGen.generateKey();
+            byte[] contentsEncryptedAES = Transaction.encryptAES(contents.getBytes(Charset.forName("UTF-8")), AESkey);
+            System.out.println("AES key used to encrypt: " + AESkey);
+
+            //encrypt AES key with RSA private key of the user
+            byte[] AESencrypted = Transaction.encryptSHA(AESkey.getEncoded(), null, main.getLocalUser().getPrivateKey());
 
             //create the random string for the ID
             char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
@@ -173,7 +178,7 @@ public class TransactionToUser extends javax.swing.JFrame {
             String transactionID = sb.toString();
 
             //create the transaction
-            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(),receivingAddress, encryptedContents,null,null,null, System.currentTimeMillis(),1 );
+            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(), receivingAddress, contentsEncryptedAES, null, AESencrypted, null, System.currentTimeMillis(), 1);
 
             //send the transaction to the pending transaction list
             main.TFG.getPendingTransactions().add(t);
@@ -192,6 +197,8 @@ public class TransactionToUser extends javax.swing.JFrame {
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
             Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidAlgorithmParameterException ex) {
+            Logger.getLogger(TransactionToUser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

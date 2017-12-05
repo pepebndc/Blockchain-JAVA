@@ -7,6 +7,8 @@ package tfg;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -174,10 +176,11 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             KeyGenerator keyGen = KeyGenerator.getInstance("AES");
             keyGen.init(128);
             SecretKey AESkey = keyGen.generateKey();
-            byte[] contentsEncryptedAES = Transaction.encryptAES(contents.getBytes(), AESkey);
+            byte[] contentsEncryptedAES = Transaction.encryptAES(contents.getBytes(Charset.forName("UTF-8")), AESkey);
+            System.out.println("AES key used to encrypt: "+ AESkey);
             
             //encrypt AES key with RSA private key of the user
-            byte[] AESencrypted = Transaction.encryptSHA(contentsEncryptedAES, null, main.getLocalUser().getPrivateKey());
+            byte[] AESencrypted = Transaction.encryptSHA(AESkey.getEncoded(), null, main.getLocalUser().getPrivateKey());
             
             //create the random string for the ID of the transaction
             char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
@@ -208,6 +211,8 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             }
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
+            Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidAlgorithmParameterException ex) {
             Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import static java.lang.Compiler.command;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -22,6 +23,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
 /**
  *
@@ -64,7 +66,7 @@ public class Transaction implements Serializable {
     public static byte[] decryptSHA(byte[] contentsToDecrypt, PublicKey pubKey, PrivateKey privKey) throws NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         Cipher decrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 
-        if (pubKey.equals(null)) {
+        if (pubKey==null) {
             System.out.println("detected private key");
             decrypt.init(Cipher.DECRYPT_MODE, privKey);
         } else {
@@ -90,15 +92,15 @@ public class Transaction implements Serializable {
         return encrypt.doFinal(contentsToDecrypt);
     }
 
-    public static byte[] encryptAES(byte[] contentsToEncrypt, SecretKey AESkey) throws NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
-        Cipher encrypt = Cipher.getInstance("AES/CTR/NoPadding");
-        encrypt.init(Cipher.ENCRYPT_MODE, AESkey);
+    public static byte[] encryptAES(byte[] contentsToEncrypt, SecretKey AESkey) throws NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+        Cipher encrypt = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        encrypt.init(Cipher.ENCRYPT_MODE, AESkey, new IvParameterSpec(new byte[16]));
         return encrypt.doFinal(contentsToEncrypt);
     }
 
-    public static byte[] decryptAES(byte[] contentsToDecrypt, SecretKey AESkey) throws NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
-        Cipher encrypt = Cipher.getInstance("AES/CTR/NoPadding");
-        encrypt.init(Cipher.DECRYPT_MODE, AESkey);
+    public static byte[] decryptAES(byte[] contentsToDecrypt, SecretKey AESkey) throws NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
+        Cipher encrypt = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        encrypt.init(Cipher.DECRYPT_MODE, AESkey, new IvParameterSpec(new byte[16]));
         return encrypt.doFinal(contentsToDecrypt);
     }
 
