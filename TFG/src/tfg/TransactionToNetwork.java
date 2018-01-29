@@ -5,6 +5,7 @@
  */
 package tfg;
 
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -13,7 +14,9 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -171,17 +174,12 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             String contents = jTextArea1.getText();
             jTextArea1.setText("");
 
-            
-            //encrypt content with AES
-            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-            keyGen.init(128);
-            SecretKey AESkey = keyGen.generateKey();
-            byte[] contentsEncryptedAES = Transaction.encryptAES(contents.getBytes(Charset.forName("UTF-8")), AESkey);
-            System.out.println("AES key used to encrypt: "+ AESkey);
-            
-            //encrypt AES key with RSA private key of the user
-            byte[] AESencrypted = Transaction.encryptSHA(AESkey.getEncoded(), null, main.getLocalUser().getPrivateKey());
-            
+            //hash contents of the field
+            String myHashedContents = main.findHash(contents);
+
+            //Sign the hash with my private key
+            byte[] mySignature = Transaction.encryptSHA(myHashedContents.getBytes(Charset.forName("UTF-8")), null, main.getLocalUser().getPrivateKey());
+
             //create the random string for the ID of the transaction
             char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
             StringBuilder sb = new StringBuilder();
@@ -193,7 +191,15 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             String transactionID = sb.toString();
 
             //create the transaction
-            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(), null, contentsEncryptedAES,null,AESencrypted, null,  System.currentTimeMillis(), 0);
+            //1.create the list of users and signatures and add yourself
+            List<String> newUserList = new ArrayList<>();
+            newUserList.add(main.getLocalUser().getAddress());
+
+            List<byte[]> newSignatureList = new ArrayList<>();
+            newSignatureList.add(mySignature);
+
+            //2. create the transaction
+            Transaction t = new Transaction(transactionID, newUserList, contents, newSignatureList, System.currentTimeMillis(), 0);
 
             //send the transaction to the rest of the network
             main.TFG.getCurrentMiningContents().add(t);
@@ -210,9 +216,7 @@ public class TransactionToNetwork extends javax.swing.JFrame {
                 }
             }
 
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
-            Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidAlgorithmParameterException ex) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException ex) {
             Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed

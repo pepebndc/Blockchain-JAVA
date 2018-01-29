@@ -5,6 +5,7 @@
  */
 package tfg;
 
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -197,95 +198,152 @@ public class TransactionPending extends javax.swing.JFrame {
         String transactionID = jTextField1.getText();
         Transaction wantedTransaction = null;
         Transaction t = null;
+
         //find the transaction on the pending transaction list
         Iterator<Transaction> it = main.TFG.getPendingTransactions().iterator();
+        int positionInList = 0;
         while (it.hasNext()) {
             t = it.next();
 
-            if (t.getID().equals(transactionID) && t.getUserReceiver().equals(main.getLocalUser().getAddress())) {
-                wantedTransaction = t;
+            if (t.getID().equals(transactionID)) {
+                //check if the user is on the receiver list
+
+                Iterator<String> ite = t.getUsers().iterator();
+
+                while (ite.hasNext()) {
+                    positionInList++;
+                    if (ite.next().equals(main.getLocalUser().getAddress())) {
+                        wantedTransaction = t;
+
+                    }
+                }
             }
         }
-        if (wantedTransaction != null) {
-            System.out.println("there is a transaction: " + wantedTransaction.getID());
-            System.out.println("User creator: " + wantedTransaction.getUserCreator());
-        } else {
+
+        if (wantedTransaction == null) {
             System.out.println("there is no transaction available");
-        }
-        //get the contents in plain text
-        //find user of the creator
-        User creatorUser = null;
-        Iterator<User> itU = main.TFG.getUsers().iterator();
-        while (itU.hasNext()) {
+        } else {
+            System.out.println("there is a transaction: " + wantedTransaction.getID());
+            System.out.println("User creator: " + wantedTransaction.getUsers().get(0));
 
-            User u = itU.next();
-            System.out.println("List of users, address:: " + u.getAddress());
-            System.out.println("List of users, desired address: " + wantedTransaction.getUserCreator());
-            if (u.getAddress().equals(wantedTransaction.getUserCreator())) {
-                creatorUser = u;
-                System.out.println("we have the user: " + u.getPublicKey());
+            //get the contents in plain text
+            String contents = t.getContents();
+
+            //find user of the creator
+            User creatorUser = null;
+            Iterator<User> itU = main.TFG.getUsers().iterator();
+            while (itU.hasNext()) {
+
+                User u = itU.next();
+                System.out.println("List of users, address:: " + u.getAddress());
+                System.out.println("List of users, desired address: " + wantedTransaction.getUsers().get(0));
+                if (u.getAddress().equals(wantedTransaction.getUsers().get(0))) {
+                    creatorUser = u;
+                    System.out.println("we have the user: " + u.getAddress());
+                }
             }
-        }
-        try {
-            //decrypt AES key with creator's public key
-            System.out.println("started getting AES from creator2");
-            byte[] AESkeyByte = Transaction.decryptSHA(wantedTransaction.getAESkeySent(), creatorUser.getPublicKey(), null);
-            SecretKey AESkey = new SecretKeySpec(AESkeyByte, 0, AESkeyByte.length, "AES");
-            System.out.println("AES key decrypted: " + AESkey);
-            //decrypt contents with AES key from the creator
-            byte[] contents = Transaction.decryptAES(wantedTransaction.getEncryptedContents(), AESkey);
-            String decryptedMessage = new String(contents, StandardCharsets.UTF_8);
+            try {
+                boolean signatureAdded = false;
+                boolean moreUsers = false;
+                //get the hash of the contents and sign them
+                String hashContents = main.findHash(contents);
+                byte[] SignedHash = Transaction.encryptSHA(hashContents.getBytes(Charset.forName("UTF-8")), null, main.getLocalUser().getPrivateKey());
 
-            //encrypt contents with AES key
-            byte[] contentsEncryptedAES = Transaction.encryptAES(decryptedMessage.getBytes(Charset.forName("UTF-8")), AESkey);
+                //get the hash of the creator signed and decrypt it
+                byte[] decodedUserHash = Transaction.decryptSHA(wantedTransaction.getSignatures().get(0), creatorUser.getPublicKey(), null);
+                String originalSignedContents = new String(decodedUserHash, StandardCharsets.UTF_8);
 
-            //encrypt AES key with my private key
-            byte[] AESencrypted = Transaction.encryptSHA(AESkey.getEncoded(), null, main.getLocalUser().getPrivateKey());
+                //compare the hash
+                if (originalSignedContents.equals(hashContents)) {
+                    //add your signature to the transaction
+                    t.getSignatures().set(positionInList, SignedHash);
+                    signatureAdded = true;
+                } else {
+                    System.out.println("different hash when comparing the one I created and the one published by the creator");
+                }
 
-            //add the agreed contents and AES key to the transaction
-            t.setAESkeyAgreed(AESencrypted);
-            t.setEncryptedContentsAgreed(contentsEncryptedAES);
-
-            main.TFG.getCurrentMiningContents().add(t);
-
-            Iterator<String> itH = main.getTFG().getHosts().iterator();
-            while (itH.hasNext()) {
-                String host = itH.next();
-                try {
-                    if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
-                        TCPclient.sendNewContent(host);
+                //check if there are users pending to sign
+                Iterator<byte[]> ite = t.getSignatures().iterator();
+                while (ite.hasNext()) {
+                    if (ite.next() == null) {
+                        moreUsers = true;
                     }
-                } catch (UnknownHostException ex) {
-                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
+                System.out.println("More Users / signature Added: " + moreUsers + signatureAdded);
 
-            //remove from pending transactions and notify the network
-            Iterator<Transaction> itT = main.TFG.getPendingTransactions().iterator();
-            while (itT.hasNext()) {
-                Transaction transactionRemoved = itT.next();
-                if (transactionRemoved.equals(wantedTransaction)) {
-                    itT.remove();
-                }
-            }
+                //if the signature was added and there are no more users, set as mining contents and remove from pending (notify the network)
+                if (signatureAdded && !moreUsers) {
 
-            Iterator<String> itR = main.getTFG().getHosts().iterator();
-            while (itR.hasNext()) {
-                String host = itR.next();
-                try {
-                    if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
-                        TCPclient.sendNewPendingTransaction(host);
+                    //set new mining contents and notify the network
+                    main.TFG.getCurrentMiningContents().add(t);
+
+                    Iterator<String> itH = main.getTFG().getHosts().iterator();
+                    while (itH.hasNext()) {
+                        String host = itH.next();
+                        try {
+                            if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                                TCPclient.sendNewContent(host);
+                            }
+                        } catch (UnknownHostException ex) {
+                            Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-                } catch (UnknownHostException ex) {
-                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+
+                    //remove from pending transactions and notify the network
+                    Iterator<Transaction> itT = main.TFG.getPendingTransactions().iterator();
+                    while (itT.hasNext()) {
+                        Transaction transactionRemoved = itT.next();
+                        if (transactionRemoved.equals(wantedTransaction)) {
+                            itT.remove();
+                        }
+                    }
+
+                    Iterator<String> itR = main.getTFG().getHosts().iterator();
+                    while (itR.hasNext()) {
+                        String host = itR.next();
+                        try {
+                            if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                                TCPclient.sendNewPendingTransaction(host);
+                            }
+                        } catch (UnknownHostException ex) {
+                            Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
                 }
 
-                repaint();
+                //if the signature was added and there are more users, remove from pending and update with the new one
+                if (signatureAdded && moreUsers) {
+
+                    //remove from pending transactions, add the new one and notify the network
+                    Iterator<Transaction> itT = main.TFG.getPendingTransactions().iterator();
+                    while (itT.hasNext()) {
+                        Transaction transactionRemoved = itT.next();
+                        if (transactionRemoved.equals(wantedTransaction)) {
+                            itT.remove();
+                        }
+                    }
+
+                    main.TFG.getPendingTransactions().add(t);
+
+                    Iterator<String> itR = main.getTFG().getHosts().iterator();
+                    while (itR.hasNext()) {
+                        String host = itR.next();
+                        try {
+                            if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                                TCPclient.sendNewPendingTransaction(host);
+                            }
+                        } catch (UnknownHostException ex) {
+                            Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    }
+
+                }
+            } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException ex) {
+                Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
-            Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidAlgorithmParameterException ex) {
-            Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
+            repaint();
         }
 
 
@@ -306,7 +364,7 @@ public class TransactionPending extends javax.swing.JFrame {
         Iterator<Transaction> it = main.getTFG().getPendingTransactions().iterator();
         while (it.hasNext()) {
             Transaction t = it.next();
-            if (t.getUserCreator().equals(myAddress)) {
+            if (t.getUsers().get(0).equals(myAddress)) {
                 listOfTransactions = listOfTransactions + "\n--------\n" + t.getID();
                 transactionSent = true;
             }
@@ -318,11 +376,20 @@ public class TransactionPending extends javax.swing.JFrame {
 
         //sent to my user, pending to verify
         boolean transactionReceived = false;
+        boolean userOnList = false;
         listOfTransactions = listOfTransactions + "\n +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ \nTransactions received waiting for verification:";
         Iterator<Transaction> it2 = main.getTFG().getPendingTransactions().iterator();
         while (it2.hasNext()) {
             Transaction t = it2.next();
-            if (t.getUserReceiver().equals(myAddress)) {
+            //check if the user is on the list
+            Iterator<String> it3 = t.getUsers().iterator();
+            it3.next(); //avoid the '0' position (creator)
+            while (it3.hasNext()) {
+                if (it3.next().equals(myAddress)) {
+                    userOnList = true;
+                }
+            }
+            if (userOnList) {
                 listOfTransactions = listOfTransactions + "\n--------\n" + t.getID();
                 transactionReceived = true;
             }
@@ -339,58 +406,67 @@ public class TransactionPending extends javax.swing.JFrame {
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
         // get info of the transaction
         String transactionID = jTextField1.getText();
-        Transaction wantedTransaction = new Transaction("", "", "", null, null, null, null, 0, 0);
+        Transaction wantedTransaction = new Transaction("", null, "", null, 0, 0);
         wantedTransaction.setID("no transaction");
+        int positionOnList = 0;
 
         //find the transaction on the pending transaction list
         Iterator<Transaction> it = main.TFG.getPendingTransactions().iterator();
         while (it.hasNext()) {
             Transaction t = it.next();
+            boolean userOnList = false;
 
-            if (t.getID().equals(transactionID) && (t.getUserReceiver().equals(main.getLocalUser().getAddress()) || t.getUserCreator().equals(main.getLocalUser().getAddress()))) {
+            //check if the user is on the list
+            Iterator<String> it3 = t.getUsers().iterator();
+            while (it3.hasNext()) {
+                if (it3.next().equals(main.getLocalUser().getAddress())) {
+                    userOnList = true;
+                }
+                positionOnList++;
+            }
+            if (t.getID().equals(transactionID) && userOnList) {
                 wantedTransaction = t;
             }
         }
 
         //check if we have a matched transaction
         if (!wantedTransaction.getID().equals("no transaction")) {
-            if (wantedTransaction.getUserReceiver().equals(main.getLocalUser().getAddress())) {
+            if (positionOnList > 0) {
                 jButton1.setEnabled(true);
             }
             System.out.println("Transaction: " + wantedTransaction.getID());
-            System.out.println("Creator user: " + wantedTransaction.getUserCreator());
-            try {
-                String details = "";
-                User creatorUser = null;
-                //find user of the creator
-                Iterator<User> itU = main.TFG.getUsers().iterator();
-                while (itU.hasNext()) {
-                    User u = itU.next();
-                    System.out.println("Address of the user on the list: " + u.getAddress());
-                    if (u.getAddress().equals(wantedTransaction.getUserCreator())) {
-                        creatorUser = u;
-                        System.out.println("Address of matched user: " + u.getAddress());
-                    }
+            System.out.println("Creator user: " + wantedTransaction.getUsers().get(0));
+            String details = "";
+            User creatorUser = null;
+            //find user of the creator
+            Iterator<User> itU = main.TFG.getUsers().iterator();
+            while (itU.hasNext()) {
+                User u = itU.next();
+                System.out.println("Address of the user on the list: " + u.getAddress());
+                if (u.getAddress().equals(wantedTransaction.getUsers().get(0))) {
+                    creatorUser = u;
+                    System.out.println("Address of matched user: " + u.getAddress());
                 }
-
-                //decrypt AES key with creator's public key
-                System.out.println("started getting AES from creator2");
-                byte[] AESkeyByte = Transaction.decryptSHA(wantedTransaction.getAESkeySent(), creatorUser.getPublicKey(), null);
-                SecretKey AESkey = new SecretKeySpec(AESkeyByte, 0, AESkeyByte.length, "AES");
-                System.out.println("AES key decrypted: " + AESkey);
-                
-                //decrypt contents with AES key from the creator
-                byte[] contents = Transaction.decryptAES(wantedTransaction.getEncryptedContents(), AESkey);
-                String decryptedMessage = new String(contents, StandardCharsets.UTF_8);
-                
-                
-                details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \n Type: To another user\nReceiver User: " + wantedTransaction.getUserReceiver() + "\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
-                jTextArea3.setText(details);
-            } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
-                Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvalidAlgorithmParameterException ex) {
-                Logger.getLogger(TransactionPending.class.getName()).log(Level.SEVERE, null, ex);
             }
+            details = "Autor: " + wantedTransaction.getUsers().get(0) + " (" + creatorUser.getName() + ") \n Type: To another user \n Date: " + new Date(wantedTransaction.getDate());
+            details = details + "\n -----------Contents-----------\n" + wantedTransaction.getContents() + "\n\nList of users: (a cross means they have already signed)";
+
+            //show a list of users and whether or not they have signed
+            Iterator<String> itUser = wantedTransaction.getUsers().iterator();
+            Iterator<byte[]> itSigned = wantedTransaction.getSignatures().iterator();
+
+            while (itUser.hasNext()) {
+                String userAddress = itUser.next();
+                byte[] userSign = itSigned.next();
+                details = details + "\n";
+                if (userSign != null) {
+                    details = details + "[x] " + userAddress;
+                } else {
+                    details = details + "[ ] " + userAddress;
+                }
+            }
+
+            jTextArea3.setText(details);
 
         } else {
             jButton1.setEnabled(false);

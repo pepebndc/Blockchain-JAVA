@@ -5,6 +5,7 @@
  */
 package tfg;
 
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -12,7 +13,9 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +57,9 @@ public class TransactionToUser extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -84,7 +89,13 @@ public class TransactionToUser extends javax.swing.JFrame {
         jLabel9.setText("Pepe Blasco - ETSIT UPV 2017/18");
         jLabel9.setToolTipText("");
 
-        jLabel3.setText("Receiving Address:");
+        jLabel3.setText("Receiving Addresses:  (separate using ';')");
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane2.setViewportView(jTextArea2);
+
+        jLabel4.setText("Contents:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -95,7 +106,7 @@ public class TransactionToUser extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 60, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jSeparator1))
@@ -105,17 +116,18 @@ public class TransactionToUser extends javax.swing.JFrame {
                             .addComponent(jSeparator5)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jScrollPane2)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField1))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3)
-                                .addGap(0, 26, Short.MAX_VALUE))))
+                                        .addComponent(jButton1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButton3)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel9)))
@@ -129,10 +141,12 @@ public class TransactionToUser extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -153,19 +167,20 @@ public class TransactionToUser extends javax.swing.JFrame {
             //SEND
 
             String contents = jTextArea1.getText();
-            String receivingAddress = jTextField1.getText();
+            String receivingAddresses = jTextArea2.getText();
             jTextArea1.setText("");
-            jTextField1.setText("");
+            jTextArea2.setText("");
+            
+            //find the number of semicolons
+            int count = receivingAddresses.length() - receivingAddresses.replace(";", "").length();
+            //separate the string
+            String[] address = receivingAddresses.split(";");
+            
+            //hash contents of the field
+            String myHashedContents = main.findHash(contents);
 
-            //encrypt content with AES
-            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-            keyGen.init(128);
-            SecretKey AESkey = keyGen.generateKey();
-            byte[] contentsEncryptedAES = Transaction.encryptAES(contents.getBytes(Charset.forName("UTF-8")), AESkey);
-            System.out.println("AES key used to encrypt: " + AESkey);
-
-            //encrypt AES key with RSA private key of the user
-            byte[] AESencrypted = Transaction.encryptSHA(AESkey.getEncoded(), null, main.getLocalUser().getPrivateKey());
+            //Sign the hash with my private key
+            byte[] mySignature = Transaction.encryptSHA(myHashedContents.getBytes(Charset.forName("UTF-8")), null, main.getLocalUser().getPrivateKey());
 
             //create the random string for the ID
             char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
@@ -178,7 +193,23 @@ public class TransactionToUser extends javax.swing.JFrame {
             String transactionID = sb.toString();
 
             //create the transaction
-            Transaction t = new Transaction(transactionID, main.getLocalUser().getAddress(), receivingAddress, contentsEncryptedAES, null, AESencrypted, null, System.currentTimeMillis(), 1);
+            //1.create the list of users and signatures and add yourself
+            List<String> newUserList = new ArrayList<>();
+            newUserList.add(main.getLocalUser().getAddress());            
+
+            List<byte[]> newSignatureList = new ArrayList<>();
+            newSignatureList.add(mySignature);            
+            
+            //add the receiving addresses
+            for(int a=0; a<1+count; a++){
+                if(address[a]!=null){
+                newUserList.add(address[a]);
+                newSignatureList.add(null);
+                }
+            }
+
+            //2. create the transaction
+            Transaction t = new Transaction(transactionID, newUserList, contents, newSignatureList, System.currentTimeMillis(), 1);
 
             //send the transaction to the pending transaction list
             main.TFG.getPendingTransactions().add(t);
@@ -197,7 +228,7 @@ public class TransactionToUser extends javax.swing.JFrame {
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException ex) {
             Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidAlgorithmParameterException ex) {
+        } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(TransactionToUser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -246,11 +277,13 @@ public class TransactionToUser extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextArea jTextArea2;
     // End of variables declaration//GEN-END:variables
 }

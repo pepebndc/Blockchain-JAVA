@@ -5,14 +5,11 @@
  */
 package tfg;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  *
@@ -34,8 +31,6 @@ public class main {
         String timeStamp = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss").format(new java.util.Date());
         return timeStamp;
     }
-
-
 
     /**
      * @return the TFG
@@ -79,7 +74,22 @@ public class main {
         mining = aMining;
     }
 
+    public static String findHash(String plaintext) throws UnsupportedEncodingException {
+        String hashText = "";
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] bytes = md.digest(plaintext.getBytes("UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            hashText = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return hashText;
+    }
 
 }
-
- 

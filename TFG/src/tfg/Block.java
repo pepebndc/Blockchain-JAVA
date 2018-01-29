@@ -52,10 +52,10 @@ public class Block implements Serializable {
         String code = sb.toString();
         String hash = "hi";
         int nonceInt = (int) (Math.random() * 1000000000);
-        List<Transaction> listOfTransactions ;
-        String fileData ="";
+        List<Transaction> listOfTransactions;
+        String fileData = "";
         int index = 0;
-        long time=0;
+        long time = 0;
         String lastHash;
 
         //Changing the nonce to match difficulty
@@ -63,8 +63,7 @@ public class Block implements Serializable {
             index = main.getTFG().getChain().size();
             time = System.currentTimeMillis();
             lastHash = main.getTFG().getChain().get(index - 1).getHash();
-            fileData = Transaction.transactionListToString( main.getTFG().getCurrentMiningContents());
-            
+            fileData = Transaction.transactionListToString(main.getTFG().getCurrentMiningContents());
 
             int t = 0;
             while (!hash.startsWith(code) && t != 10) {
@@ -76,26 +75,24 @@ public class Block implements Serializable {
 
         }
 
-        if(main.isMining()){
-        System.out.println("Block " + index + " has been mined at "+main.currentTime()+" by address: "+main.getLocalUser().getAddress()+ " @ IP: " +InetAddress.getLocalHost().getHostAddress()+" --> " + hash);
+        if (main.isMining()) {
+            System.out.println("Block " + index + " has been mined at " + main.currentTime() + " by address: " + main.getLocalUser().getAddress() + " @ IP: " + InetAddress.getLocalHost().getHostAddress() + " --> " + hash);
 
-        String nonceString = String.valueOf(nonceInt);
+            String nonceString = String.valueOf(nonceInt);
 
-        return new String[]{hash, nonceString,String.valueOf(time) };
-        }else{
+            return new String[]{hash, nonceString, String.valueOf(time)};
+        } else {
             return new String[]{"", "", ""};
         }
-        
-        
 
     }
 
     static String computeHash(int index, long time, String data, String lastHash, int nonceInt) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
-        String plaintext="";
-        String hashtext="";
+        String plaintext = "";
+        String hashtext = "";
         plaintext = index + time + data + lastHash + Integer.toString(nonceInt);
-        
+
         /* MD5
         MessageDigest m = MessageDigest.getInstance("MD5");
         m.reset();
@@ -108,22 +105,19 @@ public class Block implements Serializable {
         while (hashtext.length() < 32) {
             hashtext = "0" + hashtext;
         }
-        */
-        
+         */
         //SHA-512
-        
-            try {
-         MessageDigest md = MessageDigest.getInstance("SHA-512");         
-         byte[] bytes = md.digest(plaintext.getBytes("UTF-8"));
-         StringBuilder sb = new StringBuilder();
-         for(int i=0; i< bytes.length ;i++){
-            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-         }
-         hashtext = sb.toString();
-        } 
-       catch (NoSuchAlgorithmException e){
-        e.printStackTrace();
-       }
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            byte[] bytes = md.digest(plaintext.getBytes("UTF-8"));
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            hashtext = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
         return hashtext;
     }

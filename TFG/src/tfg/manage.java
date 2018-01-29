@@ -5,7 +5,6 @@
  */
 package tfg;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,25 +12,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -569,9 +563,7 @@ public class manage extends javax.swing.JFrame {
                 System.out.println("New address loaded: " + main.getLocalUser().getAddress());
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 try {
@@ -588,6 +580,7 @@ public class manage extends javax.swing.JFrame {
                 jTextField2.setText(main.getLocalUser().getAddress());
                 jTextField2.setEditable(false);
                 jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
+
 
                 repaint();
             } catch (UnknownHostException ex) {
@@ -638,31 +631,34 @@ public class manage extends javax.swing.JFrame {
                     Iterator<User> it = main.TFG.getUsers().iterator();
                     while (it.hasNext()) {
                         User u = it.next();
-                        if (u.getAddress().equals(wantedTransaction.getUserCreator())) {
+                        if (u.getAddress().equals(wantedTransaction.getUsers().get(0))) {
                             creatorUser = u;
                         }
                     }
 
-                    //decrypt AES key with creator's public key
-                    System.out.println("Started getting AES from creator1");
-                    byte[] AESkeyByte = Transaction.decryptSHA(wantedTransaction.getAESkeySent(), creatorUser.getPublicKey(), null);
-                    System.out.println("AES in bytes decrypted");
-                    SecretKey AESkey = new SecretKeySpec(AESkeyByte, 0, AESkeyByte.length, "AES");
-                    System.out.println("AES key decrypted: "+ AESkey);
+                    //hash the contents and compare with the signed hash of the user
+                    String contents = wantedTransaction.getContents();
+                    String hashedContents = main.findHash(contents);
 
-                    //decrypt contents with AES key from the creator
-                    byte[] contents = Transaction.decryptAES(wantedTransaction.getEncryptedContents(), AESkey);
-                    System.out.println("Decrypted contents in bytes");
-                    String decryptedMessage = new String(contents, StandardCharsets.UTF_8);
+                    byte[] decodedUserHash = Transaction.decryptSHA(wantedTransaction.getSignatures().get(0), creatorUser.getPublicKey(), null);
+                    String signedContents = new String(decodedUserHash, StandardCharsets.UTF_8);
 
-                    details = "Autor: " + wantedTransaction.getUserCreator() + " (" + creatorUser.getName() + ") \nType: To the network\nDate: " + new Date(wantedTransaction.getDate()) + "\nContents: \n" + decryptedMessage;
-                } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException ex) {
+                    if (signedContents.equals(hashedContents)) {
+                        //the hash is the same
+                        details = "Autor: " + creatorUser.getAddress() + " (" + creatorUser.getName() + ") \nType: To the network\nDate: " + new Date(wantedTransaction.getDate()) + "\nContents: \n" + contents;
+
+                    } else {
+                        //the hash is different
+                        details = "Autor: " + creatorUser.getAddress() + " (" + creatorUser.getName() + ") \nType: To the network\nDate: " + new Date(wantedTransaction.getDate()) + "\nContents: \n THE HASH DOES NOT MATCH, INVALID TRANSACTION";
+                        System.out.println("decoded hash plain:" + new String(decodedUserHash, StandardCharsets.UTF_8));
+                        details = details + "\n hash of the contents: " + hashedContents.getBytes(Charset.forName("UTF-8")) + "( " + hashedContents + " ) \n user-signed hash: " + decodedUserHash;
+                    }
+
+                } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                //TRANSACTION TO ANOTHER USER
-                
 
-                //TRANSACTION TO ANOTHER USER
+                //TRANSACTION TO ANOTHER USER(s) type==1
             } else {
 
                 try {
@@ -670,52 +666,41 @@ public class manage extends javax.swing.JFrame {
                     Iterator<User> it = main.TFG.getUsers().iterator();
                     while (it.hasNext()) {
                         User u = it.next();
-                        if (u.getAddress().equals(wantedTransaction.getUserCreator())) {
+                        if (u.getAddress().equals(wantedTransaction.getUsers().get(0))) {
                             creatorUser = u;
                         }
                     }
 
-                    //find user of the secondary user
-                    Iterator<User> it2 = main.TFG.getUsers().iterator();
-                    while (it2.hasNext()) {
-                        User u = it2.next();
-                        if (u.getAddress().equals(wantedTransaction.getUserReceiver())) {
-                            secondaryUser = u;
+                    //hash the contents and compare with the signed hash of the user
+                    String contents = wantedTransaction.getContents();
+                    String hashedContents = main.findHash(contents);
+
+                    byte[] decodedUserHash = Transaction.decryptSHA(wantedTransaction.getSignatures().get(0), creatorUser.getPublicKey(), null);
+                    String signedContents = new String(decodedUserHash, StandardCharsets.UTF_8);
+
+                    if (signedContents.equals(hashedContents)) {
+                        //the hash is the same
+                        details = "Autor: " + creatorUser.getAddress() + " (" + creatorUser.getName() + ") \n";
+                        details = details + "Type: To another user(s) \n Date: " + new Date(wantedTransaction.getDate()) + "\n -----------Contents-----------\n" + contents;
+
+                        //show a list of all the users in the transaction
+                        details = details + "\n\nList of users who signed the transaction:";
+                        Iterator<String> itUser = wantedTransaction.getUsers().iterator();
+                        while (itUser.hasNext()) {
+                            details = details + "\n " + itUser.next();
                         }
-                    }
-
-                    //decrypt AES key with creator's public key
-                    System.out.println("started getting AES from creator2");
-                    byte[] AESkeyByte = Transaction.decryptSHA(wantedTransaction.getAESkeySent(), creatorUser.getPublicKey(), null);
-                    SecretKey AESkey = new SecretKeySpec(AESkeyByte, 0, AESkeyByte.length, "AES");
-                    System.out.println("AES key decrypted: "+ AESkey);
-                    //decrypt contents with AES key from the creator
-                    byte[] contents = Transaction.decryptAES(wantedTransaction.getEncryptedContents(), AESkey);
-                    String decryptedMessage = new String(contents, StandardCharsets.UTF_8);
-
-                    //-------------------------------------
-                    //decrypt AES key with receiver's public key
-                    System.out.println("started getting AES from receiver");
-                    byte[] AESkeyByte2 = Transaction.decryptSHA(wantedTransaction.getAESkeyAgreed(), secondaryUser.getPublicKey(), null);
-                    SecretKey AESkey2 = new SecretKeySpec(AESkeyByte2, 0, AESkeyByte2.length, "AES");
-
-                    //decrypt contents with AES key from the receiver
-                    byte[] contents2 = Transaction.decryptAES(wantedTransaction.getEncryptedContentsAgreed(), AESkey2);
-                    String decryptedMessage2 = new String(contents, StandardCharsets.UTF_8);
-
-                    if (decryptedMessage2.equals(decryptedMessage)) {
-                        details = "Autor: " + wantedTransaction.getUserCreator() + " \n Type: To another user \n Secondary User: " + wantedTransaction.getUserReceiver() + "\n Date: " + new Date(wantedTransaction.getDate()) + "\n Contents: \n" + decryptedMessage;
 
                     } else {
-
-                        details = "This transaction is corrupted, the contents of the autor and the receiver do not match.";
+                        //the hash is different
+                        details = "Autor: " + creatorUser.getAddress() + " (" + creatorUser.getName() + ") \nType: To another user(s) \n Date: " + new Date(wantedTransaction.getDate()) + "\nContents: \n THE HASH DOES NOT MATCH, INVALID TRANSACTION";
+                        System.out.println("decoded hash plain:" + new String(decodedUserHash, StandardCharsets.UTF_8));
+                        details = details + "\n hash of the contents: " + hashedContents.getBytes(Charset.forName("UTF-8")) + "( " + hashedContents + " ) \n user-signed hash: " + decodedUserHash;
                     }
 
-                } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
-                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InvalidAlgorithmParameterException ex) {
+                } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
                     Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
+
             }
 
         } else {
@@ -768,16 +753,24 @@ public class manage extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(manage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(manage.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(manage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(manage.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(manage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(manage.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(manage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(manage.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 

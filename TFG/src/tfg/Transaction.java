@@ -33,24 +33,19 @@ public class Transaction implements Serializable {
 
     private static final long serialVersionUID = 5950169519310163575L;
     private String ID;
-    private String UserCreator;
-    private String UserReceiver;
-    private byte[] EncryptedContents;
-    private byte[] EncryptedContentsAgreed;
-    private byte[] AESkeySent;
-    private byte[] AESkeyAgreed;
+
+    private String Contents;
+    private List <String> users;
+    private List <byte[]> signatures;
     private long date;
     private int type;
 
-    Transaction(String id, String creator, String Receiver, byte[] contents, byte[] contentsAgreed, byte[] AESkeySent, byte[] AESkeyAgreed, long date, int type) {
+    Transaction(String id, List <String> users, String contents, List <byte[]> signatures, long date, int type) {
 
         this.ID = id;
-        this.UserCreator = creator;
-        this.UserReceiver = Receiver;
-        this.EncryptedContents = contents;
-        this.EncryptedContentsAgreed = contentsAgreed;
-        this.AESkeyAgreed = AESkeyAgreed;
-        this.AESkeySent = AESkeySent;
+        this.users = users;
+        this.Contents = contents;
+        this.signatures=signatures;
         this.date = date;
         this.type = type;
     }
@@ -138,43 +133,20 @@ public class Transaction implements Serializable {
     /**
      * @return the UserCreator
      */
-    public String getUserCreator() {
-        return UserCreator;
-    }
-
-    /**
-     * @param UserCreator the UserCreator to set
-     */
-    public void setUserCreator(String UserCreator) {
-        this.UserCreator = UserCreator;
-    }
-
-    /**
-     * @return the UserReceiver
-     */
-    public String getUserReceiver() {
-        return UserReceiver;
-    }
-
-    /**
-     * @param UserReceiver the UserReceiver to set
-     */
-    public void setUserReceiver(String UserReceiver) {
-        this.UserReceiver = UserReceiver;
-    }
+   
 
     /**
      * @return the EncryptedContents
      */
-    public byte[] getEncryptedContents() {
-        return EncryptedContents;
+    public String getContents() {
+        return Contents;
     }
 
     /**
      * @param EncryptedContents the EncryptedContents to set
      */
-    public void setEncryptedContents(byte[] EncryptedContents) {
-        this.EncryptedContents = EncryptedContents;
+    public void setContents(String EncryptedContents) {
+        this.Contents = EncryptedContents;
     }
 
     /**
@@ -206,44 +178,32 @@ public class Transaction implements Serializable {
     }
 
     /**
-     * @return the EncryptedContentsAgreed
+     * @return the signatures
      */
-    public byte[] getEncryptedContentsAgreed() {
-        return EncryptedContentsAgreed;
+    public List <byte[]> getSignatures() {
+        return signatures;
     }
 
     /**
-     * @param EncryptedContentsAgreed the EncryptedContentsAgreed to set
+     * @param signatures the signatures to set
      */
-    public void setEncryptedContentsAgreed(byte[] EncryptedContentsAgreed) {
-        this.EncryptedContentsAgreed = EncryptedContentsAgreed;
+    public void setSignatures(List <byte[]> signatures) {
+        this.signatures = signatures;
     }
 
     /**
-     * @return the AESkeySent
+     * @return the users
      */
-    public byte[] getAESkeySent() {
-        return AESkeySent;
+    public List <String> getUsers() {
+        return users;
     }
 
     /**
-     * @param AESkeySent the AESkeySent to set
+     * @param users the users to set
      */
-    public void setAESkeySent(byte[] AESkeySent) {
-        this.AESkeySent = AESkeySent;
+    public void setUsers(List <String> users) {
+        this.users = users;
     }
 
-    /**
-     * @return the AESkeyAgreed
-     */
-    public byte[] getAESkeyAgreed() {
-        return AESkeyAgreed;
-    }
 
-    /**
-     * @param AESkeyAgreed the AESkeyAgreed to set
-     */
-    public void setAESkeyAgreed(byte[] AESkeyAgreed) {
-        this.AESkeyAgreed = AESkeyAgreed;
-    }
 }
