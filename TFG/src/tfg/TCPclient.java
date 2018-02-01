@@ -49,7 +49,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("new host messaje sent to " + ip);
+            System.out.println("[TCP CLIENT] New host messaje sent to " + ip);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -66,7 +66,7 @@ public class TCPclient {
                 so = new Socket(ip, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -86,7 +86,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("new host accepted messaje sent to " + ip);
+            System.out.println("[TCP CLIENT] New host accepted messaje sent to " + ip);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -103,7 +103,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -123,7 +123,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("new host ADD messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT]  New host ADD messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -140,7 +140,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT]  Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -160,7 +160,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("new user ADD messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT]  New user ADD messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -177,7 +177,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -198,7 +198,7 @@ public class TCPclient {
             oo.close();
             so.close();
 
-            System.out.println("new contents messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT]  New contents messaje sent to " + endPoint);
 
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
@@ -216,7 +216,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -237,7 +237,7 @@ public class TCPclient {
             oo.close();
             so.close();
 
-            System.out.println("new pending transaction messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT]  New pending transaction messaje sent to " + endPoint);
 
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
@@ -255,7 +255,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -275,7 +275,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("new difficulty messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT] New difficulty messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -292,7 +292,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -312,7 +312,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("NEW BLOCK messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT] NEW BLOCK messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -329,7 +329,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -349,7 +349,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("please DISCONECT messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT] DISCONECT messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -366,7 +366,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -386,7 +386,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("SEND CHALLENGE messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT] SEND CHALLENGE messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -403,7 +403,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -423,7 +423,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("CHALLENGE RESPONSE messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT] CHALLENGE RESPONSE messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -440,7 +440,7 @@ public class TCPclient {
                 so = new Socket(endPoint, 4001);
                 oo = new ObjectOutputStream(so.getOutputStream());
             } catch (IOException e) {
-                System.out.println("Problems conecting on TCP");
+                System.out.println("[TCP CLIENT] Problems conecting on TCP");
                 System.out.println(e);
             }
 
@@ -460,7 +460,7 @@ public class TCPclient {
             oo.flush();
             oo.close();
             so.close();
-            System.out.println("DISCONECT messaje sent to " + endPoint);
+            System.out.println("[TCP CLIENT] DISCONECT messaje sent to " + endPoint);
         } catch (IOException ex) {
             Logger.getLogger(TCPclient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -474,7 +474,7 @@ public class TCPclient {
             s = new Socket(ip, 4001);
             oo = new ObjectOutputStream(s.getOutputStream());
         } catch (IOException e) {
-            System.out.println("Problems conecting on TCP");
+            System.out.println("[TCP CLIENT] Problems conecting on TCP");
             System.out.println(e);
         }
         oo.writeObject(CM);

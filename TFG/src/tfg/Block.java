@@ -76,7 +76,7 @@ public class Block implements Serializable {
         }
 
         if (main.isMining()) {
-            System.out.println("Block " + index + " has been mined at " + main.currentTime() + " by address: " + main.getLocalUser().getAddress() + " @ IP: " + InetAddress.getLocalHost().getHostAddress() + " --> " + hash);
+            System.out.println("[MINED BLOCK] Block " + index + " has been mined at " + main.currentTime() + " by address: " + main.getLocalUser().getAddress() + " @ IP: " + InetAddress.getLocalHost().getHostAddress() + " --> " + hash);
 
             String nonceString = String.valueOf(nonceInt);
 

@@ -202,6 +202,7 @@ public class TransactionPending extends javax.swing.JFrame {
         //find the transaction on the pending transaction list
         Iterator<Transaction> it = main.TFG.getPendingTransactions().iterator();
         int positionInList = 0;
+        int userPosition =0;
         while (it.hasNext()) {
             t = it.next();
 
@@ -211,10 +212,13 @@ public class TransactionPending extends javax.swing.JFrame {
                 Iterator<String> ite = t.getUsers().iterator();
 
                 while (ite.hasNext()) {
-                    positionInList++;
+                    
                     if (ite.next().equals(main.getLocalUser().getAddress())) {
                         wantedTransaction = t;
+                        userPosition=positionInList;
 
+                    }else{
+                        positionInList++;
                     }
                 }
             }
@@ -235,7 +239,7 @@ public class TransactionPending extends javax.swing.JFrame {
             while (itU.hasNext()) {
 
                 User u = itU.next();
-                System.out.println("List of users, address:: " + u.getAddress());
+                System.out.println("List of users, address: " + u.getAddress());
                 System.out.println("List of users, desired address: " + wantedTransaction.getUsers().get(0));
                 if (u.getAddress().equals(wantedTransaction.getUsers().get(0))) {
                     creatorUser = u;
@@ -256,7 +260,9 @@ public class TransactionPending extends javax.swing.JFrame {
                 //compare the hash
                 if (originalSignedContents.equals(hashContents)) {
                     //add your signature to the transaction
-                    t.getSignatures().set(positionInList, SignedHash);
+                    t.getSignatures().set((userPosition), SignedHash);
+                    System.out.println("signed in position: "+ (userPosition) );
+                    
                     signatureAdded = true;
                 } else {
                     System.out.println("different hash when comparing the one I created and the one published by the creator");
@@ -264,10 +270,14 @@ public class TransactionPending extends javax.swing.JFrame {
 
                 //check if there are users pending to sign
                 Iterator<byte[]> ite = t.getSignatures().iterator();
+                int count1=0;
                 while (ite.hasNext()) {
-                    if (ite.next() == null) {
+                    byte[] temp = ite.next();
+                    if (temp == null) {
+                        System.out.println ("the user is pending to sign: " + count1);
                         moreUsers = true;
                     }
+                    count1++;
                 }
                 System.out.println("More Users / signature Added: " + moreUsers + signatureAdded);
 
@@ -442,7 +452,7 @@ public class TransactionPending extends javax.swing.JFrame {
             Iterator<User> itU = main.TFG.getUsers().iterator();
             while (itU.hasNext()) {
                 User u = itU.next();
-                System.out.println("Address of the user on the list: " + u.getAddress());
+                //System.out.println("Address of the user on the list: " + u.getAddress());
                 if (u.getAddress().equals(wantedTransaction.getUsers().get(0))) {
                     creatorUser = u;
                     System.out.println("Address of matched user: " + u.getAddress());

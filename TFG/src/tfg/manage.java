@@ -406,7 +406,7 @@ public class manage extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            System.out.print("Is the Blockchain valid? - ");
+            System.out.print(" Is the Blockchain valid? - ");
             if (main.getTFG().validateChain()) {
                 System.out.println("YES");
                 jTextPane1.setText("VALID");
@@ -447,7 +447,11 @@ public class manage extends javax.swing.JFrame {
                 jTextArea1.setText("Block not yet mined");
 
             } else {
-                String contents = Transaction.formatedTransactionList(main.getTFG().getChain().get(num).getData());
+                String contents="";
+                
+                Date d = new Date(main.getTFG().getChain().get(num).getTime());
+                contents=contents + "Block number: "+ main.getTFG().getChain().get(num).getIndex() + "-- Mined on "+ d+ "\n\n";
+                contents =contents+ Transaction.formatedTransactionList(main.getTFG().getChain().get(num).getData());
                 jTextArea1.setText(contents);
 
             }

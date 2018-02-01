@@ -202,10 +202,10 @@ public class TransactionToUser extends javax.swing.JFrame {
             
             //add the receiving addresses
             for(int a=0; a<1+count; a++){
-                if(address[a]!=null){
+                
                 newUserList.add(address[a]);
                 newSignatureList.add(null);
-                }
+                
             }
 
             //2. create the transaction

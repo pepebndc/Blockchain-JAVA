@@ -68,8 +68,9 @@ public class TCPserver extends Thread {
 
             try {//READ NEW COMMANDMESSAJE
                 command = (CommandMessaje) inStream.readObject();
+                System.out.println("[TCP SERVER]");
                 //System.out.println("I have the CommandMessaje");
-                System.out.println("Command received = " + command.getCommand());
+                //System.out.println("Command received = " + command.getCommand());
             } catch (IOException | ClassNotFoundException ex) {
                 System.out.println("Error reading the CommandMessaje");
                 Logger.getLogger(TCPserver.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,14 +92,14 @@ public class TCPserver extends Thread {
                     }
                     String plainTextChallenge = sb.toString();
                     main.challengeStored = plainTextChallenge;
-                    System.out.println("I have created a challenge: " + plainTextChallenge);
+                    //System.out.println("I have created a challenge: " + plainTextChallenge);
 
                     //encrypt the challenge with the public key of the new host
                     PublicKey pubKey = command.getPubKey();
                     Cipher encrypt = Cipher.getInstance("RSA/ECB/PKCS1Padding");
                     encrypt.init(Cipher.ENCRYPT_MODE, pubKey);
                     byte[] encryptedMessage = encrypt.doFinal(plainTextChallenge.getBytes());
-                    System.out.println("I have created a challenge, encrypted: " + encryptedMessage);
+                    //System.out.println("I have created a challenge, encrypted: " + encryptedMessage);
                     TCPclient.sendChallenge(ClientIP, encryptedMessage);
 
                     return;
@@ -146,12 +147,12 @@ public class TCPserver extends Thread {
             //I HAVE BEEN SENT THE SOLUTION OF A CHALLENGE
             if (command.getCommand().equals("NEW HOST SOLUTION")) {
                 System.out.println("I HAVE BEEN SENT THE SOLUTION OF A CHALLENGE");
-                System.out.println("The challenge I sent: " + main.challengeStored);
-                System.out.println("The challenge I received: " + command.getContents());
+                //System.out.println("The challenge I sent: " + main.challengeStored);
+                //System.out.println("The challenge I received: " + command.getContents());
                 //compare the solution with the sent challenge
                 if (command.getContents().equals(main.challengeStored)) {
                     //notify the new user that it's been accepted
-                    
+                    System.out.println("User accepted, challenge correct");
 
                     //CHECK IF THE USER IS ON THE USERS LISTS. IF NOT, NOTIFY THE NETWORK OF A NEW USER
                     boolean existsUser = false;
@@ -216,6 +217,7 @@ public class TCPserver extends Thread {
 
                 } else {
                     TCPclient.sendFailedChallenge(ClientIP);
+                    System.out.println("User denied, challenge failed");
                 }
                 return;
             }
@@ -242,7 +244,7 @@ public class TCPserver extends Thread {
             //A NEW USER HAS JOINED, ADD TO THE USERS LIST
             if (command.getCommand().equals("NEW USER ADD")) {
                 try {
-                    System.out.println("A new user has joined");
+                    System.out.println("NEW USER JOINED");
                     User newUser = new User(command.getName(), command.getAddress(), command.getPubKey());
                     main.TFG.getUsers().add(newUser);
                     return;
@@ -253,7 +255,7 @@ public class TCPserver extends Thread {
             //THERE IS A NEW CONTENT TO MINE, UPDATE MINING CONTENTS
             if (command.getCommand().equals("ADD CONTENT")) {
 
-                System.out.println("There is a new content to mine");
+                System.out.println("NEW MINING CONTENTS");
 
                 main.TFG.setCurrentMiningContents(command.getTransactionList());
                 return;
@@ -261,20 +263,20 @@ public class TCPserver extends Thread {
             //THERE IS A NEW PENDING TRANSACTION
             if (command.getCommand().equals("PENDING TRANSACTION")) {
 
-                System.out.println("There is a new pending transactiopn");
+                System.out.println("NEW PENDING TRANSACTION");
 
                 main.TFG.setPendingTransactions(command.getTransactionList());
                 return;
             }
             //THERE IS A NEW DIFFICULTY
             if (command.getCommand().equals("DIFF")) {
-                System.out.println("There is a new difficulty in the network");
+                System.out.println("NEW DIFFICULTY IN THE NETWORK");
                 main.TFG.setDiff(Integer.parseInt(command.getContents()));
                 return;
             }
             //THERE IS A NEW BLOCK
             if (command.getCommand().equals("NEW BLOCK")) {
-                System.out.println("There is a new block in the network");
+                System.out.println("NEW BLOCK IN THE NETWORK");
                 main.TFG.getChain().add(command.getBlock());
                 //erase current mining contents
                 main.TFG.setCurrentMiningContents(null);
@@ -283,7 +285,7 @@ public class TCPserver extends Thread {
             }
             //THE HOST WANTS TO DISCONECT, DROP FROM HOST LIST
             if (command.getCommand().equals("DISCONECT")) {
-                System.out.println("The host " + ClientIP + " wants to disconect");
+                System.out.println(ClientIP + " DISCONECTED");
 
                 Iterator<String> it = main.TFG.getHosts().iterator();
                 while (it.hasNext()) {
