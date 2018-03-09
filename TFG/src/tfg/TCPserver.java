@@ -131,15 +131,7 @@ public class TCPserver extends Thread {
                     TCPclient.sendChallengeResponse(ClientIP, decryptedMessage, main.getLocalUser().getName(), main.getLocalUser().getAddress(), main.getLocalUser().getPublicKey());
 
                     return;
-                } catch (InvalidKeyException ex) {
-                    Logger.getLogger(TCPserver.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchAlgorithmException ex) {
-                    Logger.getLogger(TCPserver.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchPaddingException ex) {
-                    Logger.getLogger(TCPserver.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalBlockSizeException ex) {
-                    Logger.getLogger(TCPserver.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (BadPaddingException ex) {
+                } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
                     Logger.getLogger(TCPserver.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
