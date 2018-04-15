@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -39,6 +40,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class manage extends javax.swing.JFrame {
 
     Thread mining;
+    String docHashVerify = "";
 
     /**
      * Creates new form manage
@@ -94,6 +96,10 @@ public class manage extends javax.swing.JFrame {
         jTextArea2 = new javax.swing.JTextArea();
         jTextField2 = new javax.swing.JTextField();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jButton5 = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jLabel3.setText("jLabel3");
 
@@ -116,9 +122,9 @@ public class manage extends javax.swing.JFrame {
         jLabel1.setText("TFG BLOCKCHAIN");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("ADD NEW TRANSACTION");
+        jLabel2.setText("ADD NEW DOCUMENT");
 
-        jButton2.setText("VALIDATE");
+        jButton2.setText("VALIDATE THE BLOCKCHAIN");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -149,7 +155,7 @@ public class manage extends javax.swing.JFrame {
         jLabel4.setToolTipText("");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel5.setText("SEE TRANSACTIONS OF A BLOCK");
+        jLabel5.setText("SEE DOCUMENTS OF A BLOCK");
         jLabel5.setToolTipText("");
 
         jScrollPane2.setViewportView(jTextPane1);
@@ -161,7 +167,7 @@ public class manage extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setText("View current");
+        jButton6.setText("VIEW CURRENT DIFFICULTY");
         jButton6.setToolTipText("");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,7 +213,7 @@ public class manage extends javax.swing.JFrame {
             }
         });
 
-        jButton11.setText("REVIEW PENDING TRANSACTIONS");
+        jButton11.setText("REVIEW PENDING DOCUMENTS");
         jButton11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton11ActionPerformed(evt);
@@ -215,7 +221,7 @@ public class manage extends javax.swing.JFrame {
         });
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel11.setText("SEE INFORMATION OF A TRANSACTION");
+        jLabel11.setText("SEE INFORMATION OF A DOCUMENT");
         jLabel11.setToolTipText("");
 
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -236,6 +242,24 @@ public class manage extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("Select File");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setText("File HASH:");
+
+        jLabel13.setText("(select a document to compare both)");
+
+        jButton1.setText("SEE YOUR REGISTERED DOCUMENTS");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -247,30 +271,19 @@ public class manage extends javax.swing.JFrame {
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton8))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(32, 32, 32))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator5)
-                    .addComponent(jSeparator1)
-                    .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9)
-                .addContainerGap())
+                                .addComponent(jTextField2)))))
+                .addGap(43, 43, 43))
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(jLabel2)
@@ -278,25 +291,26 @@ public class manage extends javax.swing.JFrame {
                 .addComponent(jButton10)
                 .addGap(35, 35, 35)
                 .addComponent(jButton9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 223, Short.MAX_VALUE)
                 .addComponent(jButton11)
                 .addGap(44, 44, 44))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel5)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jTextField4))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(jButton3)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jButton3)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel5)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jTextField4))))
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1))
                     .addComponent(jSeparator2))
@@ -306,34 +320,49 @@ public class manage extends javax.swing.JFrame {
                 .addComponent(jSeparator6)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(124, 124, 124)
+                        .addGap(10, 10, 10)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(56, 56, 56)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton6)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(36, 36, 36))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
+                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel11)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField1)))))
+                                .addComponent(jTextField1))))
+                    .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator5)
+                    .addComponent(jSeparator1)
+                    .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel13)))
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jCheckBox1)
+                                .addGap(98, 98, 98)))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(285, 285, 285)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jCheckBox1)
-                .addGap(108, 108, 108))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,30 +382,35 @@ public class manage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton10)
-                    .addComponent(jButton11)
-                    .addComponent(jButton9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton4)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton6)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton10)
+                            .addComponent(jButton11)
+                            .addComponent(jButton9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton4)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton6))))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
@@ -384,17 +418,26 @@ public class manage extends javax.swing.JFrame {
                             .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4))
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel13)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
@@ -447,11 +490,11 @@ public class manage extends javax.swing.JFrame {
                 jTextArea1.setText("Block not yet mined");
 
             } else {
-                String contents="";
-                
+                String contents = "";
+
                 Date d = new Date(main.getTFG().getChain().get(num).getTime());
-                contents=contents + "Block number: "+ main.getTFG().getChain().get(num).getIndex() + "-- Mined on "+ d+ "\n\n";
-                contents =contents+ Transaction.formatedTransactionList(main.getTFG().getChain().get(num).getData());
+                contents = contents + "Block number: " + main.getTFG().getChain().get(num).getIndex() + "-- Mined on " + d + "\n\n";
+                contents = contents + Transaction.formatedTransactionList(main.getTFG().getChain().get(num).getData());
                 jTextArea1.setText(contents);
 
             }
@@ -465,7 +508,7 @@ public class manage extends javax.swing.JFrame {
         try {
             String diff = String.valueOf(main.getTFG().getDiff());
             jTextField3.setText(diff);
-            jLabel1.setText("BLOCKCHAIN: \"" + main.getTFG().getName() + "\"");
+            jLabel1.setText("PROOF OF EXISTENCE: \"" + main.getTFG().getName() + "\"");
             jTextField2.setText(main.getLocalUser().getAddress());
             jTextField2.setEditable(false);
             jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
@@ -585,7 +628,6 @@ public class manage extends javax.swing.JFrame {
                 jTextField2.setEditable(false);
                 jLabel8.setText("IP Address: \"" + InetAddress.getLocalHost().getHostAddress() + "\"");
 
-
                 repaint();
             } catch (UnknownHostException ex) {
                 Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
@@ -642,6 +684,7 @@ public class manage extends javax.swing.JFrame {
 
                     //hash the contents and compare with the signed hash of the user
                     String contents = wantedTransaction.getContents();
+                    docHashVerify = contents;
                     String hashedContents = main.findHash(contents);
 
                     byte[] decodedUserHash = Transaction.decryptSHA(wantedTransaction.getSignatures().get(0), creatorUser.getPublicKey(), null);
@@ -649,13 +692,13 @@ public class manage extends javax.swing.JFrame {
 
                     if (signedContents.equals(hashedContents)) {
                         //the hash is the same
-                        details = "Autor: " + creatorUser.getAddress() + " (" + creatorUser.getName() + ") \nType: To the network\nDate: " + new Date(wantedTransaction.getDate()) + "\nContents: \n" + contents;
+                        details = "Autor: " + creatorUser.getAddress() + " (" + creatorUser.getName() + ") \nType: To the network\nDate: " + new Date(wantedTransaction.getDate()) + "\nHash of the document: \n" + contents;
 
                     } else {
                         //the hash is different
                         details = "Autor: " + creatorUser.getAddress() + " (" + creatorUser.getName() + ") \nType: To the network\nDate: " + new Date(wantedTransaction.getDate()) + "\nContents: \n THE HASH DOES NOT MATCH, INVALID TRANSACTION";
                         System.out.println("decoded hash plain:" + new String(decodedUserHash, StandardCharsets.UTF_8));
-                        details = details + "\n hash of the contents: " + hashedContents.getBytes(Charset.forName("UTF-8")) + "( " + hashedContents + " ) \n user-signed hash: " + decodedUserHash;
+                        details = details + "\n hash of the document: " + hashedContents.getBytes(Charset.forName("UTF-8")) + "( " + hashedContents + " ) \n user-signed hash: " + decodedUserHash;
                     }
 
                 } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
@@ -677,6 +720,7 @@ public class manage extends javax.swing.JFrame {
 
                     //hash the contents and compare with the signed hash of the user
                     String contents = wantedTransaction.getContents();
+                    docHashVerify = contents;
                     String hashedContents = main.findHash(contents);
 
                     byte[] decodedUserHash = Transaction.decryptSHA(wantedTransaction.getSignatures().get(0), creatorUser.getPublicKey(), null);
@@ -685,7 +729,7 @@ public class manage extends javax.swing.JFrame {
                     if (signedContents.equals(hashedContents)) {
                         //the hash is the same
                         details = "Autor: " + creatorUser.getAddress() + " (" + creatorUser.getName() + ") \n";
-                        details = details + "Type: To another user(s) \n Date: " + new Date(wantedTransaction.getDate()) + "\n -----------Contents-----------\n" + contents;
+                        details = details + "Type: To another user(s) \n Date: " + new Date(wantedTransaction.getDate()) + "\n -----------Hash of the document-----------\n" + contents;
 
                         //show a list of all the users in the transaction
                         details = details + "\n\nList of users who signed the transaction:";
@@ -698,7 +742,7 @@ public class manage extends javax.swing.JFrame {
                         //the hash is different
                         details = "Autor: " + creatorUser.getAddress() + " (" + creatorUser.getName() + ") \nType: To another user(s) \n Date: " + new Date(wantedTransaction.getDate()) + "\nContents: \n THE HASH DOES NOT MATCH, INVALID TRANSACTION";
                         System.out.println("decoded hash plain:" + new String(decodedUserHash, StandardCharsets.UTF_8));
-                        details = details + "\n hash of the contents: " + hashedContents.getBytes(Charset.forName("UTF-8")) + "( " + hashedContents + " ) \n user-signed hash: " + decodedUserHash;
+                        details = details + "\n hash of the document: " + hashedContents.getBytes(Charset.forName("UTF-8")) + "( " + hashedContents + " ) \n user-signed hash: " + decodedUserHash;
                     }
 
                 } catch (UnsupportedEncodingException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
@@ -708,7 +752,7 @@ public class manage extends javax.swing.JFrame {
             }
 
         } else {
-            details = "Transaction not found";
+            details = "Document not found";
         }
 
         jTextArea2.setText(details);
@@ -742,6 +786,127 @@ public class manage extends javax.swing.JFrame {
             System.out.println("Stoped mining");
         }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        FileInputStream in = null;
+        try {
+            String fileLocation = "";
+            JFileChooser fileopen = new JFileChooser();
+            int ret = fileopen.showDialog(null, "Open file");
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                File file = fileopen.getSelectedFile();
+                fileLocation = file.getAbsolutePath();
+            }
+            System.out.println("Path selected: " + fileLocation);
+
+            File doc = new File(fileLocation);
+            byte[] docBytesArray = new byte[(int) doc.length()];
+            in = new FileInputStream(doc);
+            in.read(docBytesArray);
+            in.close();
+            String contents = main.BytesToHash(docBytesArray);
+
+            jLabel12.setText("File HASH:\"" + contents + "\"");
+            System.out.println("Doc hash: " + contents);
+            if (contents.equals(docHashVerify)) {
+                jLabel13.setText("Is the same? -->TRUE");
+            } else {
+                jLabel13.setText("Is the same? -->FALSE");
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | NoSuchAlgorithmException ex) {
+            Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //CHOOSE FILE TO SAVE THE CONTENTS
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("./"));
+        int actionDialog = chooser.showSaveDialog(this);
+        if (actionDialog == JFileChooser.APPROVE_OPTION) {
+            File fileName = new File(chooser.getSelectedFile() + ".txt");
+            System.out.println(fileName);
+            if (fileName == null) {
+                return;
+            }
+            if (fileName.exists()) {
+                actionDialog = JOptionPane.showConfirmDialog(this,
+                        "Replace existing file?");
+                // may need to check for cancel option as well
+                if (actionDialog == JOptionPane.NO_OPTION) {
+                    return;
+                }
+            }
+
+            //SAVE TO FILE            
+            PrintWriter out;
+            try {
+                out = new PrintWriter(fileName);
+                out.println("---------- LIST OF DOCUMENTS SAVED BY ----------");
+                out.println(main.getLocalUser().getAddress());
+                out.println("------ DATE: " + new Date() + " ------");
+                out.println("");
+                out.println("LIST:");
+                out.println("");
+                out.println("------------------------------------------------");
+                boolean documents = false;
+
+                //find the documents of the user
+                //find the transactions between all the blocks and their transactions
+                Iterator<Block> itB = main.TFG.getChain().iterator();
+                while (itB.hasNext()) {
+                    Block b = itB.next();
+
+                    Iterator<Transaction> itT = b.getData().iterator();
+                    while (itT.hasNext()) {
+                        Transaction t = itT.next();
+
+                        for (int i = 0; i < t.getUsers().size(); i++) {
+                            if (t.getUsers().get(i).equals(main.getLocalUser().getAddress())) {
+                                documents = true;
+                                out.println("Transaction in block " + b.getIndex());
+                                out.println("Transaction hash: " + t.getID());
+                                out.println("Document hash: " + t.getContents());
+                                out.print("Type:");
+
+                                if (t.getType() == 0) {
+                                    out.println("To the network.");
+                                } else {
+                                    out.println("Signed by several users");
+                                    out.println("List of users who signed:");
+                                    for (int z = 0; z < t.getUsers().size(); z++) {
+                                        out.println("  " + t.getUsers().get(z));
+                                    }
+                                }
+                                out.println("------------------------------------------------");
+                                out.println("");
+                            }
+                        }
+
+                    }
+
+                }
+                if (documents) {
+                    out.println("------------ END OF THE LIST -----------------------");
+                }else{
+                    out.println("No documents found");
+                }
+                out.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -790,11 +955,13 @@ public class manage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
@@ -803,6 +970,8 @@ public class manage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

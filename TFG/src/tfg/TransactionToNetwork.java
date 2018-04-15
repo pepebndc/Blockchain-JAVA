@@ -5,6 +5,11 @@
  */
 package tfg;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -26,6 +31,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 /**
@@ -41,6 +47,8 @@ public class TransactionToNetwork extends javax.swing.JFrame {
         initComponents();
     }
 
+    String docHash;
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,12 +62,13 @@ public class TransactionToNetwork extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         jButton2.setText("SEND");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -82,11 +91,7 @@ public class TransactionToNetwork extends javax.swing.JFrame {
         jLabel9.setToolTipText("");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("SEND TRANSACTION TO THE NETWORK");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jLabel1.setText("SEND DOCUMENT TO THE NETWORK");
 
         jLabel2.setText("Your Address:");
 
@@ -106,6 +111,17 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setText("Select File");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("File path:");
+
+        jLabel4.setText("File HASH:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -113,29 +129,34 @@ public class TransactionToNetwork extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel9))
+                        .addGap(70, 70, 70)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel3)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
+                                        .addComponent(jButton1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButton3))))
+                            .addComponent(jLabel2)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jSeparator5, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE))))
+                            .addComponent(jSeparator5)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel9)))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3))
-                    .addComponent(jLabel2))
-                .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,16 +168,21 @@ public class TransactionToNetwork extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1)
-                        .addComponent(jButton3)))
-                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jButton3)))
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -170,55 +196,58 @@ public class TransactionToNetwork extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             //SEND
+            
+            if (!docHash.equals("0")) {
+                String contents=docHash;
+                String myHashedContents = main.findHash(contents);
+                jLabel3.setText("File Path:");
+                jLabel4.setText("File HASH:");
+                //Sign the hash with my private key
+                byte[] mySignature = Transaction.encryptSHA(myHashedContents.getBytes(Charset.forName("UTF-8")), null, main.getLocalUser().getPrivateKey());
 
-            String contents = jTextArea1.getText();
-            jTextArea1.setText("");
+                //create the random string for the ID of the transaction
+                char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+                StringBuilder sb = new StringBuilder();
+                Random random = new Random();
+                for (int i = 0; i < 75; i++) {
+                    char c = chars[random.nextInt(chars.length)];
+                    sb.append(c);
+                }
+                String transactionID = sb.toString();
 
-            //hash contents of the field
-            String myHashedContents = main.findHash(contents);
+                //create the transaction
+                //1.create the list of users and signatures and add yourself
+                List<String> newUserList = new ArrayList<>();
+                newUserList.add(main.getLocalUser().getAddress());
 
-            //Sign the hash with my private key
-            byte[] mySignature = Transaction.encryptSHA(myHashedContents.getBytes(Charset.forName("UTF-8")), null, main.getLocalUser().getPrivateKey());
+                List<byte[]> newSignatureList = new ArrayList<>();
+                newSignatureList.add(mySignature);
 
-            //create the random string for the ID of the transaction
-            char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-            StringBuilder sb = new StringBuilder();
-            Random random = new Random();
-            for (int i = 0; i < 75; i++) {
-                char c = chars[random.nextInt(chars.length)];
-                sb.append(c);
-            }
-            String transactionID = sb.toString();
+                //2. create the transaction
+                Transaction t = new Transaction(transactionID, newUserList, contents, newSignatureList, System.currentTimeMillis(), 0);
 
-            //create the transaction
-            //1.create the list of users and signatures and add yourself
-            List<String> newUserList = new ArrayList<>();
-            newUserList.add(main.getLocalUser().getAddress());
+                //send the transaction to the rest of the network
+                main.TFG.getCurrentMiningContents().add(t);
 
-            List<byte[]> newSignatureList = new ArrayList<>();
-            newSignatureList.add(mySignature);
-
-            //2. create the transaction
-            Transaction t = new Transaction(transactionID, newUserList, contents, newSignatureList, System.currentTimeMillis(), 0);
-
-            //send the transaction to the rest of the network
-            main.TFG.getCurrentMiningContents().add(t);
-
-            Iterator<String> it = main.getTFG().getHosts().iterator();
-            while (it.hasNext()) {
-                String host = it.next();
-                try {
-                    if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
-                        TCPclient.sendNewContent(host);
+                Iterator<String> it = main.getTFG().getHosts().iterator();
+                while (it.hasNext()) {
+                    String host = it.next();
+                    try {
+                        if (!host.equals(InetAddress.getLocalHost().getHostAddress())) {
+                            TCPclient.sendNewContent(host);
+                        }
+                    } catch (UnknownHostException ex) {
+                        Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (UnknownHostException ex) {
-                    Logger.getLogger(manage.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException ex) {
             Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -232,6 +261,40 @@ public class TransactionToNetwork extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        FileInputStream in=null;
+        try {
+            String fileLocation="";
+            JFileChooser fileopen = new JFileChooser();
+            int ret = fileopen.showDialog(null, "Open file");
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                File file = fileopen.getSelectedFile();
+                fileLocation = file.getAbsolutePath();
+            }   System.out.println("Path selected: " + fileLocation);
+            
+            File doc = new File(fileLocation);
+            byte[] docBytesArray = new byte[(int) doc.length()];
+            in = new FileInputStream(doc);
+            in.read(docBytesArray);
+            in.close();
+            String contents = main.BytesToHash(docBytesArray);
+            jLabel3.setText("File Path: \"" + fileLocation + "\"");
+            jLabel4.setText("File HASH:\n\"" + contents + "\"");
+            System.out.println("Doc hash: " + contents);
+            docHash=contents;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | NoSuchAlgorithmException ex) {
+            Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                Logger.getLogger(TransactionToNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -272,12 +335,13 @@ public class TransactionToNetwork extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

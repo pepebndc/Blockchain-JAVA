@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class CommandMessaje implements Serializable {
 
-    private static final long serialVersionUID = 7526472295622776147L;
+    private static long serialVersionUID = 7526472295622776147L;
 
     private String command;
     private String address;
@@ -29,9 +29,10 @@ public class CommandMessaje implements Serializable {
     private byte [] encoded;
     private Transaction transaction;
     private List <Transaction> transactionList;
+    private Document document;
     
 
-    CommandMessaje(String command, String address, BlockChain BC, Block B, String contents, PublicKey pubKey, String name, byte[] encoded, Transaction transaction,List <Transaction> transactionList ) {
+    CommandMessaje(String command, String address, BlockChain BC, Block B, String contents, PublicKey pubKey, String name, byte[] encoded, Transaction transaction,List <Transaction> transactionList, Document doc ) {
         this.command = command;
         this.address = address;
         this.blockchain = BC;
@@ -42,6 +43,7 @@ public class CommandMessaje implements Serializable {
         this.encoded=encoded;
         this.transaction=transaction;
         this.transactionList=transactionList;
+        this.document=doc;
     }
 
     /**
@@ -184,6 +186,34 @@ public class CommandMessaje implements Serializable {
      */
     public void setTransactionList(List <Transaction> transactionList) {
         this.transactionList = transactionList;
+    }
+
+    /**
+     * @return the serialVersionUID
+     */
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    /**
+     * @param aSerialVersionUID the serialVersionUID to set
+     */
+    public static void setSerialVersionUID(long aSerialVersionUID) {
+        serialVersionUID = aSerialVersionUID;
+    }
+
+    /**
+     * @return the document
+     */
+    public Document getDocument() {
+        return document;
+    }
+
+    /**
+     * @param document the document to set
+     */
+    public void setDocument(Document document) {
+        this.document = document;
     }
 
 

@@ -43,8 +43,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -80,8 +81,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -117,8 +119,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -154,8 +157,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -191,8 +195,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = main.TFG.getCurrentMiningContents();
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -230,8 +235,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = main.TFG.getPendingTransactions();
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -269,8 +275,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -306,8 +313,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -343,8 +351,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -380,8 +389,9 @@ public class TCPclient {
             byte[] e = challenge;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -417,8 +427,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
@@ -454,8 +465,9 @@ public class TCPclient {
             byte[] e = null;
             Transaction t = null;
             List<Transaction> tl = null;
+            Document d = null;
 
-            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl);
+            CommandMessaje command = new CommandMessaje(com, a, bc, b, c, k, n, e, t, tl,d);
             oo.writeObject(command);
             oo.flush();
             oo.close();
